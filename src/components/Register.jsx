@@ -3,7 +3,7 @@ import "../assets/css/LoginRegister.css"; // Ensure this file contains your exis
 import registerImg from '../assets/img/reg.svg';
 import loginImg from '../assets/img/login.svg';
 
-const Login = () => {
+const Register = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(true);
 
   const handleSignUpClick = () => {
@@ -86,4 +86,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
