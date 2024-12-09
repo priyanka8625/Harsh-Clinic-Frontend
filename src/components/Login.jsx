@@ -5,6 +5,11 @@ import loginImg from '../assets/img/login.svg';
 
 const Login = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    userId: '',
+    password: '',
+  });
 
   const handleSignUpClick = () => {
     setIsSignUpMode(true);
@@ -14,37 +19,102 @@ const Login = () => {
     setIsSignUpMode(false);
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const url = isSignUpMode ? "http://localhost:8080/register" : "http://localhost:8080/login";
+    const data = isSignUpMode ? { name: formData.name, userId: formData.userId, password: formData.password } : { userId: formData.userId, password: formData.password };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        // Handle successful response (e.g., redirect to dashboard or show a success message)
+        console.log("Success:", result);
+      } else {
+        // Handle error (e.g., display error message)
+        console.log("Error:", result);
+      }
+    } catch (error) {
+      console.error("Error during the request:", error);
+    }
+  };
+
   return (
     <>
       <div className={`container ${isSignUpMode ? "sign-up-mode" : ""}`}>
         <div className="forms-container">
           <div className="signin-signup">
-            <form action="#" className="sign-in-form">
+            <form onSubmit={handleSubmit} className="sign-in-form">
               <h2 className="title">Sign in</h2>
               <div className="input-field">
                 <i className="fas fa-user"></i>
-                <input type="number" placeholder="UserId (mobile no)" />
+                <input
+                  type="number"
+                  name="userId"
+                  placeholder="UserId (mobile no)"
+                  value={formData.userId}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="input-field">
                 <i className="fas fa-lock"></i>
-                <input type="password" placeholder="Password" />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
               </div>
               <input type="submit" value="Login" className="btn solid" />
             </form>
 
-            <form action="#" className="sign-up-form">
+            <form onSubmit={handleSubmit} className="sign-up-form">
               <h2 className="title">Sign up</h2>
               <div className="input-field">
                 <i className="fas fa-envelope"></i>
-                <input type="text" placeholder="Name" />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="input-field">
                 <i className="fas fa-user"></i>
-                <input type="number" placeholder="UserId (mobile no)" />
+                <input
+                  type="number"
+                  name="userId"
+                  placeholder="UserId (mobile no)"
+                  value={formData.userId}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="input-field">
                 <i className="fas fa-lock"></i>
-                <input type="password" placeholder="Password" />
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
               </div>
               <input type="submit" className="btn" value="Sign up" />
             </form>
