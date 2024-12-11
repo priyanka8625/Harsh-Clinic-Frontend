@@ -125,7 +125,7 @@ const Login = () => {
           <div className="panel left-panel">
             <div className="content">
               <h3>New here ?</h3>
-              <p>Sign Up to create your own admin account!</p>
+              <p id="p">Sign Up to create your own admin account!</p>
               <button
                 className="btn transparent"
                 id="sign-up-btn"
@@ -139,7 +139,7 @@ const Login = () => {
           <div className="panel right-panel">
             <div className="content">
               <h3>One of us ?</h3>
-              <p>Sign in to get access to the core features!</p>
+              <p id="p">Sign in to get access to the core features!</p>
               <button
                 className="btn transparent"
                 id="sign-in-btn"
