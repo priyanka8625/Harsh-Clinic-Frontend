@@ -1,7 +1,130 @@
 import React from 'react';
 import '/src/assets/css/Dashboard.css';
+import DataTable from '../reusable/DataTable';
 
+const PatientRegistration = () => {
+  // Data for the registered patient details
+  const patientData = {
+    headers: [
+      { key: 'casePaperId', label: 'Case Paper ID' },
+      { key: 'name', label: 'Name' },
+      { key: 'mobileNumber', label: 'Mobile Number' },
+      { key: 'address', label: 'Address' },
+      { key: 'gender', label: 'Gender' },
+      { key: 'registrationDate', label: 'Registration Date' },
+      { key: 'adminId', label: 'Admin ID' },
+      { key: 'status', label: 'Status' },
+      { key: 'notes', label: 'Notes' },
+    ],
+    rows: [
+      {
+        casePaperId: 101,
+        name: 'John Doe',
+        mobileNumber: '9876543210',
+        address: '123, Main Street',
+        gender: 'Male',
+        registrationDate: '08/12/2024',
+        adminId: 1,
+        status: 'Active',
+        notes: 'First-time visit',
+      },
+      {
+        casePaperId: 102,
+        name: 'Jane Roe',
+        mobileNumber: '8765432109',
+        address: '456, Oak Avenue',
+        gender: 'Female',
+        registrationDate: '09/12/2024',
+        adminId: 2,
+        status: 'Inactive',
+        notes: 'Follow-up pending',
+      },
+      {
+        casePaperId: 103,
+        name: 'Sam Smith',
+        mobileNumber: '7654321098',
+        address: '789, Pine Road',
+        gender: 'Non-binary',
+        registrationDate: '10/12/2024',
+        adminId: 3,
+        status: 'Active',
+        notes: 'Routine check-up',
+      },
+      {
+        casePaperId: 103,
+        name: 'Sam Smith',
+        mobileNumber: '7654321098',
+        address: '789, Pine Road',
+        gender: 'Non-binary',
+        registrationDate: '10/12/2024',
+        adminId: 3,
+        status: 'Active',
+        notes: 'Routine check-up',
+      },
+      {
+        casePaperId: 103,
+        name: 'Sam Smith',
+        mobileNumber: '7654321098',
+        address: '789, Pine Road',
+        gender: 'Non-binary',
+        registrationDate: '10/12/2024',
+        adminId: 3,
+        status: 'Active',
+        notes: 'Routine check-up',
+      },
+      {
+        casePaperId: 103,
+        name: 'Sam Smith',
+        mobileNumber: '7654321098',
+        address: '789, Pine Road',
+        gender: 'Non-binary',
+        registrationDate: '10/12/2024',
+        adminId: 3,
+        status: 'Active',
+        notes: 'Routine check-up',
+      },
+      {
+        casePaperId: 103,
+        name: 'Sam Smith',
+        mobileNumber: '7654321098',
+        address: '789, Pine Road',
+        gender: 'Non-binary',
+        registrationDate: '10/12/2024',
+        adminId: 3,
+        status: 'Active',
+        notes: 'Routine check-up',
+      },
+      {
+        casePaperId: 103,
+        name: 'Sam Smith',
+        mobileNumber: '7654321098',
+        address: '789, Pine Road',
+        gender: 'Non-binary',
+        registrationDate: '10/12/2024',
+        adminId: 3,
+        status: 'Active',
+        notes: 'Routine check-up',
+      },
+      {
+        casePaperId: 103,
+        name: 'Sam Smith',
+        mobileNumber: '7654321098',
+        address: '789, Pine Road',
+        gender: 'Non-binary',
+        registrationDate: '10/12/2024',
+        adminId: 3,
+        status: 'Active',
+        notes: 'Routine check-up',
+      },
+    ],
+  };
 
-const PatientRegistration = () => <h1>Patient Registration Section</h1>;
+  return (
+    <>
+      <h1>Patient Registration Section</h1>
+      <DataTable data={patientData} />
+    </>
+  );
+};
 
 export default PatientRegistration;
