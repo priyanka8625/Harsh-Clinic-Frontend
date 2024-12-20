@@ -27,7 +27,7 @@ const DataTable = ({ data }) => {
                       style={{ cursor: 'pointer', color: 'blue' }}
                       onClick={() => alert(`Viewing details for ID: ${row[data.headers[0].key]}`)}
                     >
-                      Details
+                      Print bill
                     </span>
                   ) : (
                     row[header.key]
