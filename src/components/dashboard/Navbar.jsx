@@ -10,7 +10,7 @@ const Navbar = () => (
     <div className="navbar-right">
       <div className="profile">
         <div className="info">
-          <p><b>Babar</b></p>
+          <p><b>Priyanka</b></p>
           <p>Admin</p>
         </div>
         <div className="profile-photo">

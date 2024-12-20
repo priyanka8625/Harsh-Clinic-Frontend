@@ -26,6 +26,33 @@ const DataTable = () => {
         addedOn: '08/12/2024',
       },
       {
+        ipdId: 1,
+        casePaperId: 1,
+        admissionDate: '08/12/2024',
+        dischargeDate: '12/12/2024',
+        amount: 2000,
+        adminId: 101,
+        addedOn: '08/12/2024',
+      },
+      {
+        ipdId: 1,
+        casePaperId: 1,
+        admissionDate: '08/12/2024',
+        dischargeDate: '12/12/2024',
+        amount: 2000,
+        adminId: 101,
+        addedOn: '08/12/2024',
+      },
+      {
+        ipdId: 1,
+        casePaperId: 1,
+        admissionDate: '08/12/2024',
+        dischargeDate: '12/12/2024',
+        amount: 2000,
+        adminId: 101,
+        addedOn: '08/12/2024',
+      },
+      {
         ipdId: 2,
         casePaperId: 2,
         admissionDate: '09/12/2024',
@@ -47,8 +74,8 @@ const DataTable = () => {
   };
 
   return (
-    <div className="recent_order">
-      <h2>IPD Entries</h2>
+    <>
+      <div className="recent_order">
       <table>
         <thead>
           <tr>
@@ -79,8 +106,8 @@ const DataTable = () => {
           ))}
         </tbody>
       </table>
-      <a href="#">Show All</a>
     </div>
+    </>
   );
 };
 

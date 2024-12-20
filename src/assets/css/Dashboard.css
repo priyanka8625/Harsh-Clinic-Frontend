@@ -195,7 +195,10 @@ aside {
 .main-content {
   flex-grow: 1 !important;
   /* Adjust for sidebar */
-  padding: 5rem 2rem 2rem /* Adjust for fixed navbar */
+  padding: 5rem 2rem 2rem; /* Adjust for fixed navbar */
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full height of the viewport */
 }
 
 .main-content h1 {
@@ -552,18 +555,18 @@ b{
 }
 
 /* recent order */
+.main-content h2{
+  /* margin-top: 1rem; */
+  color: var(--clr-dark);
+}
+
 
 .main-content .recent_order{
-   margin-top: 2rem;
+   margin-top: 1rem;
+   flex-grow: 1; /* Fills the remaining space */
+   overflow-y: auto; 
 }
 
-.main-content .recent_order h2{
-    color: var(--clr-dark);
-}
-
-.main-content .recent_order h2{
-  margin-bottom: 0.8rem;
-}
 .main-content .recent_order table{
   background: var(--clr-white);
   width: 100%;
@@ -573,6 +576,7 @@ b{
   box-shadow: var(--box-shadow);
   transition: all .3s ease;
   color: var(--clr-dark);
+  /* overflow-y: auto; */
 }
 .main-content .recent_order table:hover{
   box-shadow: none;
