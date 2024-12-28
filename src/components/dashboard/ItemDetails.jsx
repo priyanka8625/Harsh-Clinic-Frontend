@@ -1,6 +1,7 @@
 import React from 'react';
 import '/src/assets/css/Dashboard.css';
 import DataTable from '../reusable/DataTable';
+import { useNavigate } from 'react-router-dom';
 
 
 const ItemDetails = () =>{ 
@@ -51,9 +52,32 @@ const ItemDetails = () =>{
         ],
     };
 
+    const navigate = useNavigate();
+      const handleOnClick = ()=>{
+        navigate('/dashboard/item-details/add');
+      }
+
     return(
         <>
             <h1>Item Details Section</h1>
+            <button
+            style={{
+                marginTop: '30px',
+                marginLeft: '30px',
+                padding: '10px 20px',
+                border: '1px solid #6C63FE',
+                backgroundColor: '#6C63FE',
+                color: '#fff',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s ease',
+                borderRadius: '5px',
+                fontSize: '16px',
+                fontStyle: 'bold'
+            }}
+            onClick={handleOnClick}
+            >
+            Add record
+            </button>
             <DataTable data={itemData} />
         </>
     );

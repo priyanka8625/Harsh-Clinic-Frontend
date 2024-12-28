@@ -1,9 +1,11 @@
 import React from 'react';
 import '/src/assets/css/Dashboard.css';
 import DataTable from '../reusable/DataTable';
+import { useNavigate } from 'react-router-dom';
 
 
 const IPDEntries = () => { 
+    
     const ipdData = {
         headers: [
             { key: 'ipdId', label: 'IPD ID' },
@@ -54,9 +56,33 @@ const IPDEntries = () => {
             },
           ],
       };
+
+      const navigate = useNavigate();
+      const handleOnClick = ()=>{
+        navigate('/dashboard/ipd-entries/add');
+      }
+
     return (
         <>
             <h1>IPD Entries Section</h1>
+            <button
+          style={{
+            marginTop: '30px',
+            marginLeft: '30px',
+            padding: '10px 20px',
+            border: '1px solid #6C63FE',
+            backgroundColor: '#6C63FE',
+            color: '#fff',
+            cursor: 'pointer',
+            transition: 'background-color 0.3s ease',
+            borderRadius: '5px',
+            fontSize: '16px',
+            fontStyle: 'bold'
+          }}
+        onClick={handleOnClick}
+        >
+          Add record
+        </button>
             <DataTable data={ipdData} />
         </>
     );

@@ -570,7 +570,7 @@ b{
 .main-content .recent_order table{
   background: var(--clr-white);
   width: 100%;
-  border-radius: var(--card-border-radius);
+  border-radius: var(--card-border-radius) !important;
   padding: var(--card-padding);
   text-align: center;
   box-shadow: var(--box-shadow);
