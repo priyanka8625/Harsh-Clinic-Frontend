@@ -138,3 +138,10 @@ textarea.entries-form-input {
   outline: 2px solid #4a42d0; /* Highlight focus for keyboard users */
   outline-offset: 2px;
 }
+.search-bar {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 300px;
+}
