@@ -83,7 +83,7 @@ const IPDEntries = () => {
         >
           Add record
         </button>
-            <DataTable data={ipdData} />
+        <DataTable data={ipdData} />
         </>
     );
 }

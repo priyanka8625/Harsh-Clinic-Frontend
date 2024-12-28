@@ -13,6 +13,7 @@ import IPDForm from '../reusable/IPDForm';
 import OPDForm from '../reusable/OPDForm';
 import ItemsForm from '../reusable/ItemsForm';
 import PatientForm from '../reusable/PatientForm';
+import BillingForm from '../reusable/BillingForm';
 
 const Dashboard = () => {
   return (
@@ -30,6 +31,7 @@ const Dashboard = () => {
             <Route path="/ipd-entries/add" element={<IPDForm />} />
             <Route path="/opd-entries/add" element={<OPDForm />} />
             <Route path="/item-details/add" element={<ItemsForm />} />
+            <Route path="/billing" element={<BillingForm />} />
           </Routes>
         </main>
     </div>
