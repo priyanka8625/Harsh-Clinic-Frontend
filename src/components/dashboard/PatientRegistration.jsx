@@ -16,6 +16,7 @@ const PatientRegistration = () => {
       { key: 'adminId', label: 'Admin ID' },
       { key: 'status', label: 'Status' },
       { key: 'notes', label: 'Notes' },
+      { key: 'actions', label: 'Actions' },
     ],
     rows: [
       {
@@ -28,6 +29,7 @@ const PatientRegistration = () => {
         adminId: 1,
         status: 'Active',
         notes: 'First-time visit',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 102,
@@ -39,6 +41,7 @@ const PatientRegistration = () => {
         adminId: 2,
         status: 'Inactive',
         notes: 'Follow-up pending',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 103,
@@ -50,6 +53,7 @@ const PatientRegistration = () => {
         adminId: 3,
         status: 'Active',
         notes: 'Routine check-up',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 103,
@@ -61,6 +65,7 @@ const PatientRegistration = () => {
         adminId: 3,
         status: 'Active',
         notes: 'Routine check-up',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 103,
@@ -72,6 +77,7 @@ const PatientRegistration = () => {
         adminId: 3,
         status: 'Active',
         notes: 'Routine check-up',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 103,
@@ -83,6 +89,7 @@ const PatientRegistration = () => {
         adminId: 3,
         status: 'Active',
         notes: 'Routine check-up',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 103,
@@ -94,6 +101,7 @@ const PatientRegistration = () => {
         adminId: 3,
         status: 'Active',
         notes: 'Routine check-up',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 103,
@@ -105,6 +113,7 @@ const PatientRegistration = () => {
         adminId: 3,
         status: 'Active',
         notes: 'Routine check-up',
+        actions: ['Add IPD', 'Add OPD'],
       },
       {
         casePaperId: 103,
@@ -116,9 +125,11 @@ const PatientRegistration = () => {
         adminId: 3,
         status: 'Active',
         notes: 'Routine check-up',
+        actions: ['Add IPD', 'Add OPD'],
       },
     ],
   };
+
 
   const navigate = useNavigate();
 

@@ -1,30 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "/src/assets/css/Form.css";
 
 const OPDForm = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     opdId: "",
-    casePaperNumber: "",
+    casePaperId: "",
     opdDate: "",
     amount: "",
     notes: "",
     createDate: "",
   });
 
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
+
+  // Pre-fill data when updating or when casePaperId is passed
+  useEffect(() => {
+    if (location.state && location.state.opdData) {
+      const opdData = location.state.opdData;
+
+      setFormData({
+        opdId: opdData.opdId || "",
+        casePaperId: opdData.casePaperId || "",
+        opdDate: opdData.opdDate
+          ? new Date(opdData.opdDate).toISOString().split("T")[0]
+          : "",
+        amount: opdData.amount || "",
+        notes: opdData.notes || ""
+      });
+
+      setIsUpdateMode(true);
+    } else if (location.state && location.state.casePaperId) {
+      setFormData((prevData) => ({
+        ...prevData,
+        casePaperId: location.state.casePaperId,
+      }));
+    }
+  }, [location.state]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Validation check for empty fields
-    const { opdId, casePaperNumber, opdDate, amount, notes } = formData;
+    const { opdId, casePaperId, opdDate, amount, notes } = formData;
 
-    if (!opdId || !casePaperNumber || !opdDate || !amount || !notes ) {
+    if (!opdId ||!casePaperId || !opdDate || !amount || !notes) {
       alert("All fields are required!");
       return; // Prevent submission if fields are empty
     }
 
     // If validation passes
-    alert("Data submitted successfully");
-    console.log("Form Data:", formData); // For debugging or further processing
+    const action = isUpdateMode ? "updated" : "added";
+    alert(`Data successfully ${action}`);
+    console.log(`${action.charAt(0).toUpperCase() + action.slice(1)} Data:`, formData);
   };
 
   const handleInputChange = (e) => {
@@ -38,14 +67,18 @@ const OPDForm = () => {
   return (
     <div>
       {/* Title */}
-      <h6 className="entries-title">Enter a new OPD record</h6>
+      <h6 className="entries-title">
+        {isUpdateMode ? "Update OPD Record" : "Enter a New OPD Record"}
+      </h6>
 
       {/* Form Container */}
       <div className="entries-container">
         <form onSubmit={handleSubmit} className="entries-form">
           {/* OPD ID */}
           <div className="entries-form-group">
-            <label htmlFor="opdId" className="entries-form-label">OPD Id</label>
+            <label htmlFor="opdId" className="entries-form-label">
+              OPD ID
+            </label>
             <input
               type="text"
               id="opdId"
@@ -53,27 +86,32 @@ const OPDForm = () => {
               className="entries-form-input"
               placeholder="Enter OPD ID"
               value={formData.opdId}
+              readOnly={isUpdateMode}
               onChange={handleInputChange}
             />
           </div>
 
-          {/* Case Paper Number */}
+          {/* Case Paper ID */}
           <div className="entries-form-group">
-            <label htmlFor="casePaperNumber" className="entries-form-label">Case Paper No</label>
+            <label htmlFor="casePaperId" className="entries-form-label">
+              Case Paper ID
+            </label>
             <input
               type="text"
-              id="casePaperNumber"
-              name="casePaperNumber"
+              id="casePaperId"
+              name="casePaperId"
               className="entries-form-input"
-              placeholder="Enter case paper no."
-              value={formData.casePaperNumber}
-              onChange={handleInputChange}
+              placeholder="Enter Case Paper ID"
+              value={formData.casePaperId}
+              readOnly
             />
           </div>
 
           {/* OPD Date */}
           <div className="entries-form-group">
-            <label htmlFor="opdDate" className="entries-form-label">OPD Date</label>
+            <label htmlFor="opdDate" className="entries-form-label">
+              OPD Date
+            </label>
             <input
               type="date"
               id="opdDate"
@@ -86,7 +124,9 @@ const OPDForm = () => {
 
           {/* Amount */}
           <div className="entries-form-group">
-            <label htmlFor="amount" className="entries-form-label">Amount</label>
+            <label htmlFor="amount" className="entries-form-label">
+              Amount
+            </label>
             <input
               type="text"
               id="amount"
@@ -100,7 +140,9 @@ const OPDForm = () => {
 
           {/* Notes */}
           <div className="entries-form-group">
-            <label htmlFor="notes" className="entries-form-label">Notes</label>
+            <label htmlFor="notes" className="entries-form-label">
+              Notes
+            </label>
             <textarea
               id="notes"
               name="notes"
@@ -115,20 +157,20 @@ const OPDForm = () => {
           {/* Submit Button */}
           <button
             style={{
-              marginTop: '30px',
-              padding: '10px 20px',
-              border: '1px solid #6C63FE',
-              backgroundColor: '#6C63FE',
-              color: '#fff',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s ease',
-              borderRadius: '5px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              width: '100%',
+              marginTop: "30px",
+              padding: "10px 20px",
+              border: "1px solid #6C63FE",
+              backgroundColor: "#6C63FE",
+              color: "#fff",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              borderRadius: "5px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              width: "100%",
             }}
           >
-            Add record
+            {isUpdateMode ? "Update Record" : "Add Record"}
           </button>
         </form>
       </div>

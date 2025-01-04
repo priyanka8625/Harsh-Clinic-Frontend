@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const DataTable = ({ data }) => {
   const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
   const [filteredRows, setFilteredRows] = useState(data.rows); // State to store filtered rows
+  const [actionMenu, setActionMenu] = useState(null); // State to handle action menu visibility
 
   const navigate = useNavigate();
 
@@ -22,9 +23,48 @@ const DataTable = ({ data }) => {
     setFilteredRows(filtered);
   };
 
-  const handlePrintBill = (row) => {
-    console.log(row.ipdId); // Log the IPD ID for debugging
-    navigate('/dashboard/billing/', { state: { ipdId: row.ipdId } }); // Pass the IPD ID via state
+  const handleActionClick = (rowIndex) => {
+    setActionMenu((prevState) => (prevState === rowIndex ? null : rowIndex));
+  };
+
+  const handleAction = (action, row) => {
+    console.log(`Action: ${action}, Row:`, row);
+    setActionMenu(null);
+
+    // Perform navigation based on the action
+    switch (action) {
+      case "Add IPD":
+        navigate("/dashboard/ipd-entries/add", { state: { casePaperId: row.casePaperId } });
+        break;
+      case "Add OPD":
+        navigate("/dashboard/opd-entries/add", { state: { casePaperId: row.casePaperId } });
+        break;
+      case "Print Bill":
+        navigate("/dashboard/billing/", { state: { ipdId: row.ipdId, casePaperId: row.casePaperId } });
+        break;
+      case "Add Items for IPD":
+        navigate("/dashboard/consumed-items/add", {
+          state: { ipdId: row.ipdId},
+        });
+        break;
+      case "Add Items for OPD":
+        navigate("/dashboard/consumed-items/add", {
+          state: { opdId:row.opdId },
+        });
+        break;
+      case "Update IPD":
+          navigate("/dashboard/ipd-entries/add", 
+            { state: { ipdData: row } },
+          );
+          break;
+      case "Update OPD":
+        navigate("/dashboard/opd-entries/add", 
+          { state: { opdData: row } },
+        );
+        break;
+      default:
+        console.warn("Unknown action:", action);
+    }
   };
 
   if (!data || !data.headers || !data.rows) {
@@ -34,7 +74,9 @@ const DataTable = ({ data }) => {
   return (
     <div className="recent_order">
       {/* Search Bar */}
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}
+      >
         <input
           type="text"
           placeholder="Search..."
@@ -65,13 +107,45 @@ const DataTable = ({ data }) => {
                 {data.headers.map((header) => (
                   <td key={header.key}>
                     {header.key === "actions" ? (
-                      <span
-                        className="primary"
-                        style={{ cursor: "pointer", color: "blue" }}
-                        onClick={() => handlePrintBill(row)}
-                      >
-                        Print bill
-                      </span>
+                      <div style={{ position: "relative" }}>
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleActionClick(rowIndex)}
+                        >
+                          ⋮ {/* Unicode for three dots */}
+                        </span>
+                        {actionMenu === rowIndex && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "20px",
+                              right: "0",
+                              backgroundColor: "white",
+                              border: "1px solid #ccc",
+                              borderRadius: "4px",
+                              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                              zIndex: 10,
+                            }}
+                          >
+                            {row.actions.map((action, actionIndex) => (
+                              <div
+                                key={actionIndex}
+                                style={{
+                                  padding: "8px",
+                                  cursor: "pointer",
+                                  borderBottom:
+                                    actionIndex === row.actions.length - 1
+                                      ? "none"
+                                      : "1px solid #eee",
+                                }}
+                                onClick={() => handleAction(action, row)}
+                              >
+                                {action}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     ) : (
                       row[header.key]
                     )}

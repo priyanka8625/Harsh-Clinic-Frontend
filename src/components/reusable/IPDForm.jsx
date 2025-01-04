@@ -1,33 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react"; 
 import "/src/assets/css/Form.css";
+import { useLocation } from "react-router-dom";
 
 const IPDForm = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     ipdId: "",
-    casePaperNumber: "",
+    casePaperId: "",
     admissionDate: "",
     dischargeDate: "",
     amount: "",
     notes: "",
   });
 
-  // Handle form submission
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
+
+  useEffect(() => {
+    if (location.state && location.state.ipdData) {
+      const ipdData = location.state.ipdData;
+
+      setFormData({
+        ipdId: ipdData.ipdId || "",
+        casePaperId: ipdData.casePaperId || "",
+        admissionDate: ipdData.admissionDate
+          ? new Date(ipdData.admissionDate).toISOString().split("T")[0]
+          : "",
+        dischargeDate: ipdData.dischargeDate
+          ? new Date(ipdData.dischargeDate).toISOString().split("T")[0]
+          : "",
+        amount: ipdData.amount || "",
+        notes: ipdData.notes || "",
+      });
+
+      setIsUpdateMode(true);
+    } else if (location.state && location.state.casePaperId) {
+      setFormData((prevData) => ({
+        ...prevData,
+        casePaperId: location.state.casePaperId,
+      }));
+    }
+  }, [location.state]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { ipdId, casePaperNumber, admissionDate, dischargeDate, amount, notes } = formData;
+    const { ipdId, casePaperId, admissionDate, dischargeDate, amount, notes } = formData;
 
-    // Validate form data
-    if (!ipdId || !casePaperNumber || !admissionDate || !dischargeDate || !amount || !notes) {
+    if (!ipdId || !casePaperId || !admissionDate || !dischargeDate || !amount || !notes) {
       alert("All fields are required!");
       return;
     }
 
-    alert("Data submitted successfully");
-    console.log("Submitted Data:", formData);
+    const action = isUpdateMode ? "updated" : "added";
+    alert(`Data successfully ${action}`);
+    console.log(`${action.charAt(0).toUpperCase() + action.slice(1)} Data:`, formData);
   };
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -38,13 +66,12 @@ const IPDForm = () => {
 
   return (
     <div>
-      {/* Form Title */}
-      <h6 className="entries-title">Enter New IPD Record</h6>
+      <h6 className="entries-title">
+        {isUpdateMode ? "Update IPD Record" : "Enter New IPD Record"}
+      </h6>
 
-      {/* Form Container */}
       <div className="entries-container">
         <form onSubmit={handleSubmit} className="entries-form">
-          {/* IPD ID */}
           <div className="entries-form-group">
             <label htmlFor="ipdId" className="entries-form-label">
               IPD ID
@@ -54,29 +81,25 @@ const IPDForm = () => {
               id="ipdId"
               name="ipdId"
               className="entries-form-input"
-              placeholder="Enter ID"
               value={formData.ipdId}
-              onChange={handleInputChange}
+              readOnly={isUpdateMode}
             />
           </div>
 
-          {/* Case Paper Number */}
           <div className="entries-form-group">
-            <label htmlFor="casePaperNumber" className="entries-form-label">
+            <label htmlFor="casePaperId" className="entries-form-label">
               Case Paper No
             </label>
             <input
               type="text"
-              id="casePaperNumber"
-              name="casePaperNumber"
+              id="casePaperId"
+              name="casePaperId"
               className="entries-form-input"
-              placeholder="Enter case paper no."
-              value={formData.casePaperNumber}
-              onChange={handleInputChange}
+              value={formData.casePaperId}
+              readOnly={isUpdateMode}
             />
           </div>
 
-          {/* Admission Date */}
           <div className="entries-form-group">
             <label htmlFor="admissionDate" className="entries-form-label">
               Admission Date
@@ -91,7 +114,6 @@ const IPDForm = () => {
             />
           </div>
 
-          {/* Discharge Date */}
           <div className="entries-form-group">
             <label htmlFor="dischargeDate" className="entries-form-label">
               Discharge Date
@@ -106,7 +128,6 @@ const IPDForm = () => {
             />
           </div>
 
-          {/* Amount */}
           <div className="entries-form-group">
             <label htmlFor="amount" className="entries-form-label">
               Amount
@@ -116,13 +137,11 @@ const IPDForm = () => {
               id="amount"
               name="amount"
               className="entries-form-input"
-              placeholder="Enter amount"
               value={formData.amount}
               onChange={handleInputChange}
             />
           </div>
 
-          {/* Notes */}
           <div className="entries-form-group">
             <label htmlFor="notes" className="entries-form-label">
               Notes
@@ -131,30 +150,27 @@ const IPDForm = () => {
               id="notes"
               name="notes"
               className="entries-form-input"
-              placeholder="Enter notes"
               value={formData.notes}
               onChange={handleInputChange}
               rows="3"
             ></textarea>
           </div>
-          
-          {/* Submit Button */}
-            <button
+
+          <button
             style={{
-              marginTop: '30px',
-              padding: '10px 20px',
-              border: '1px solid #6C63FE',
-              backgroundColor: '#6C63FE',
-              color: '#fff',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s ease',
-              borderRadius: '5px',
-              fontSize: '16px',
-              fontStyle: 'bold',
-              width:'100%'
+              marginTop: "30px",
+              padding: "10px 20px",
+              border: "1px solid #6C63FE",
+              backgroundColor: "#6C63FE",
+              color: "#fff",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              borderRadius: "5px",
+              fontSize: "16px",
+              width: "100%",
             }}
           >
-            Add record
+            {isUpdateMode ? "Update Record" : "Add Record"}
           </button>
         </form>
       </div>

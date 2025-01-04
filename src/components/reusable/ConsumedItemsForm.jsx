@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "/src/assets/css/Form.css";
 import { useLocation } from "react-router-dom";
 
-const BillingForm = () => {
+const ConsumedItemsForm = () => {
   const location = useLocation();
-  const casePaperId = location.state?.casePaperId || ""; // Retrieve Case Paper ID from the state
-  const ipdId = location.state?.ipdId || ""; // Retrieve IPD ID from the state
+  const ipdId = location.state?.ipdId || "";
+  const opdId = location.state?.opdId || "";
 
-  const [formData, setFormData] = useState({
-    casePaperNumber: casePaperId, // Auto-fill case paper number
-    selectedItems: [], // Array to hold item entries
-  });
+  const isIPD = !!ipdId; // Determine if it's an IPD record
+  const initialFormData = isIPD
+    ? { ipdId, selectedItems: [], totalCost: 0 }
+    : { opdId, selectedItems: [], totalCost: 0 };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const [itemList] = useState([
     "Medicine",
@@ -27,14 +29,6 @@ const BillingForm = () => {
     mrpAmount: "",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((data) => ({
-      ...data,
-      [name]: value,
-    }));
-  };
-
   const handleItemChange = (e) => {
     const { name, value } = e.target;
     setCurrentItem((item) => ({
@@ -49,69 +43,83 @@ const BillingForm = () => {
       return;
     }
 
-    setFormData((data) => ({
-      ...data,
-      selectedItems: [...data.selectedItems, currentItem],
-    }));
+    const newItem = {
+      ...currentItem,
+      quantity: parseFloat(currentItem.quantity),
+      mrpAmount: parseFloat(currentItem.mrpAmount),
+    };
+
+    setFormData((data) => {
+      const updatedItems = [...data.selectedItems, newItem];
+      const updatedCost = updatedItems.reduce(
+        (total, item) => total + item.quantity * item.mrpAmount,
+        0
+      );
+
+      return {
+        ...data,
+        selectedItems: updatedItems,
+        totalCost: updatedCost,
+      };
+    });
 
     setCurrentItem({ itemType: "", quantity: "", mrpAmount: "" });
     setShowItemDetails(false);
   };
 
   const handleRemoveItem = (index) => {
-    setFormData((data) => ({
-      ...data,
-      selectedItems: data.selectedItems.filter((_, i) => i !== index),
-    }));
+    setFormData((data) => {
+      const updatedItems = data.selectedItems.filter((_, i) => i !== index);
+      const updatedCost = updatedItems.reduce(
+        (total, item) => total + item.quantity * item.mrpAmount,
+        0
+      );
+
+      return {
+        ...data,
+        selectedItems: updatedItems,
+        totalCost: updatedCost,
+      };
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { casePaperNumber, selectedItems } = formData;
+    const { selectedItems } = formData;
 
-    if (!casePaperNumber || selectedItems.length === 0) {
-      alert("Please fill in all required fields and add at least one item.");
+    if (selectedItems.length === 0) {
+      alert("Please add at least one item.");
       return;
     }
 
     // Send form data to the backend
-    alert("Billing details submitted successfully.");
-    console.log("Form Data:", { ipdId, casePaperId, ...formData });
+    alert("Details submitted successfully.");
+    console.log("Form Data:", formData);
   };
 
   return (
     <div>
       {/* Title */}
-      <h6 className="entries-title">Billing Details Form</h6>
+      <h6 className="entries-title">
+        Add Items for {isIPD ? "IPD" : "OPD"}
+      </h6>
 
       {/* Form Container */}
       <div className="entries-container">
         <form onSubmit={handleSubmit} className="entries-form">
-          {/* IPD ID (Autofilled) */}
+          {/* ID (Autofilled) */}
           <div className="entries-form-group">
-            <label htmlFor="ipdId" className="entries-form-label">IPD ID</label>
+            <label htmlFor={isIPD ? "ipdId" : "opdId"} className="entries-form-label">
+              {isIPD ? "IPD ID" : "OPD ID"}
+            </label>
             <input
               type="text"
-              id="ipdId"
-              name="ipdId"
+              id={isIPD ? "ipdId" : "opdId"}
+              name={isIPD ? "ipdId" : "opdId"}
               className="entries-form-input"
-              value={ipdId}
+              value={isIPD ? formData.ipdId : formData.opdId}
               disabled
-            />
-          </div>
-
-          {/* Case Paper Number */}
-          <div className="entries-form-group">
-            <label htmlFor="casePaperNumber" className="entries-form-label">Case Paper Number</label>
-            <input
-              type="text"
-              id="casePaperNumber"
-              name="casePaperNumber"
-              className="entries-form-input"
-              placeholder="Enter case paper number"
-              value={formData.casePaperNumber}
-              onChange={handleInputChange}
             />
           </div>
 
@@ -142,7 +150,13 @@ const BillingForm = () => {
                 <h4>Item Details</h4>
                 <button
                   type="button"
-                  style={{ background: "none", border: "none", cursor: "pointer", fontSize: "16px", fontWeight: "bold", }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                  }}
                   onClick={() => setShowItemDetails(false)}
                 >
                   &times;
@@ -213,6 +227,19 @@ const BillingForm = () => {
             ))}
           </div>
 
+          {/* Total Cost */}
+          <div className="entries-form-group">
+            <label htmlFor="totalCost" className="entries-form-label">Total Cost</label>
+            <input
+              type="text"
+              id="totalCost"
+              name="totalCost"
+              className="entries-form-input"
+              value={`₹${formData.totalCost}`}
+              readOnly
+            />
+          </div>
+
           {/* Submit Button */}
           <button
             style={{
@@ -230,7 +257,7 @@ const BillingForm = () => {
             }}
             type="submit"
           >
-            Submit Billing Details
+            {isIPD ? "Add IPD Items" : "Add OPD Items"}
           </button>
         </form>
       </div>
@@ -238,4 +265,4 @@ const BillingForm = () => {
   );
 };
 
-export default BillingForm;
+export default ConsumedItemsForm;

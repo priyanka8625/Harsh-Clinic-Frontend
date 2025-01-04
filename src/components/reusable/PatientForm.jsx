@@ -8,7 +8,6 @@ const PatientForm = () => {
     mobileNumber: "",
     address: "",
     gender: "",
-    registrationDate: "",
     adminId: "", // Admin ID will be handled separately
     status: "Active", // Default status set to "Active"
     notes: "",
@@ -18,9 +17,9 @@ const PatientForm = () => {
     e.preventDefault();
 
     // Validation check for empty fields
-    const { name, mobileNumber, address, gender, registrationDate, notes } = formData;
+    const { name, mobileNumber, address, gender, notes } = formData;
 
-    if (!name || !mobileNumber || !address || !gender || !registrationDate || !notes) {
+    if (!name || !mobileNumber || !address || !gender || !notes) {
       alert("All fields are required!");
       return; // Prevent submission if fields are empty
     }
@@ -103,19 +102,6 @@ const PatientForm = () => {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
-          </div>
-
-          {/* Registration Date */}
-          <div className="entries-form-group">
-            <label htmlFor="registrationDate" className="entries-form-label">Registration Date</label>
-            <input
-              type="date"
-              id="registrationDate"
-              name="registrationDate"
-              className="entries-form-input"
-              value={formData.registrationDate}
-              onChange={handleInputChange}
-            />
           </div>
 
           {/* Status */}

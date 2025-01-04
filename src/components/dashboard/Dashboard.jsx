@@ -8,12 +8,12 @@ import IPDEntries from './IPDEntries';
 import OPDEntries from './OPDEntries';
 import ItemDetails from './ItemDetails';
 import '/src/assets/css/Dashboard.css';
-import Form from '../reusable/Form';
 import IPDForm from '../reusable/IPDForm';
 import OPDForm from '../reusable/OPDForm';
 import ItemsForm from '../reusable/ItemsForm';
 import PatientForm from '../reusable/PatientForm';
 import BillingForm from '../reusable/BillingForm';
+import ConsumedItemsForm from '../reusable/ConsumedItemsForm';
 
 const Dashboard = () => {
   return (
@@ -32,6 +32,7 @@ const Dashboard = () => {
             <Route path="/opd-entries/add" element={<OPDForm />} />
             <Route path="/item-details/add" element={<ItemsForm />} />
             <Route path="/billing" element={<BillingForm />} />
+            <Route path="/consumed-items/add" element={<ConsumedItemsForm />} />
           </Routes>
         </main>
     </div>
