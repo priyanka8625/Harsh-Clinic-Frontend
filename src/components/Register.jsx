@@ -8,6 +8,7 @@ const Register = () => {
 
   const handleSignUpClick = () => {
     setIsSignUpMode(true);
+    
   };
 
   const handleSignInClick = () => {

@@ -2,9 +2,14 @@ import { useState } from "react";
 import "../assets/css/LoginRegister.css"; // Ensure this file contains your existing styles
 import registerImg from '../assets/img/reg.svg';
 import loginImg from '../assets/img/login.svg';
+import {SignUp} from "../services/user-service"
+import {SignIn} from '../services/user-service'
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const Login = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     userId: '',
@@ -14,10 +19,16 @@ const Login = () => {
   const handleSignUpClick = () => {
     setIsSignUpMode(true);
   };
+  
+  const setAdminSession = (adminId) => {
+    sessionStorage.setItem("adminId", adminId);
+  };
 
-  const handleSignInClick = () => {
+ const handleSignInClick = () => {
+    //setAdminSession(formData.userId);
     setIsSignUpMode(false);
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,29 +40,39 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = isSignUpMode ? "http://localhost:8080/register" : "http://localhost:8080/login";
-    const data = isSignUpMode ? { name: formData.name, userId: formData.userId, password: formData.password } : { userId: formData.userId, password: formData.password };
+    const url = isSignUpMode ? "http://localhost:8086/admin/add" : "http://localhost:8086/admin/login";
+       // const data = isSignUpMode ? { name: formData.name, userId: formData.userId, password: formData.password } : 
+       if(isSignUpMode){
+         const data={ name: formData.name, userId: formData.userId, password: formData.password } 
+         SignUp(data)
+         .then((resp) => {
+           console.log("Sign-up successful:", resp);
+           setIsSignUpMode(false)
+         })
+         .catch((error) => {
+           console.error("Error during signup:", error);
+         });
 
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+       }
+       else{
+         const data={ userId: formData.userId, password: formData.password };
+   
+   
+       SignIn(data)
+       .then((resp) => {
+        console.log("Sign-in successful:", resp);
+        console.log("Admin ID being set in sessionStorage:",resp.data);
 
-      const result = await response.json();
-      if (response.ok) {
-        // Handle successful response (e.g., redirect to dashboard or show a success message)
-        console.log("Success:", result);
-      } else {
-        // Handle error (e.g., display error message)
-        console.log("Error:", result);
-      }
-    } catch (error) {
-      console.error("Error during the request:", error);
-    }
+        setAdminSession(resp.data);
+        console.log(sessionStorage.getItem("adminId"));
+
+        navigate('/dashboard');
+       }) 
+       .catch((error) => {
+         console.error("Error during signin:", error);
+       });
+     
+       }
   };
 
   return (

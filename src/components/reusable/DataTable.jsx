@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "/src/assets/css/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 
 const DataTable = ({ data }) => {
   const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
-  const [filteredRows, setFilteredRows] = useState(data.rows); // State to store filtered rows
+  const [filteredRows, setFilteredRows] = useState([]); // State to store filtered rows
   const [actionMenu, setActionMenu] = useState(null); // State to handle action menu visibility
 
   const navigate = useNavigate();
+
+  // Sync filteredRows with data.rows on data change
+  useEffect(() => {
+    setFilteredRows(data.rows || []);
+  }, [data.rows]);
 
   // Handle search query change
   const handleSearch = (e) => {
@@ -28,7 +33,6 @@ const DataTable = ({ data }) => {
   };
 
   const handleAction = (action, row) => {
-    console.log(`Action: ${action}, Row:`, row);
     setActionMenu(null);
 
     // Perform navigation based on the action
@@ -114,6 +118,7 @@ const DataTable = ({ data }) => {
                         >
                           ⋮ {/* Unicode for three dots */}
                         </span>
+
                         {actionMenu === rowIndex && (
                           <div
                             style={{

@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "/src/assets/css/Form.css";
 import { useLocation } from "react-router-dom";
 
 const BillingForm = () => {
   const location = useLocation();
-  const casePaperId = location.state?.casePaperId || ""; // Retrieve Case Paper ID from the state
   const ipdId = location.state?.ipdId || ""; // Retrieve IPD ID from the state
 
   const [formData, setFormData] = useState({
-    casePaperNumber: casePaperId, // Auto-fill case paper number
+    casePaperNumber: "",
     selectedItems: [], // Array to hold item entries
   });
 
@@ -77,7 +76,7 @@ const BillingForm = () => {
 
     // Send form data to the backend
     alert("Billing details submitted successfully.");
-    console.log("Form Data:", { ipdId, casePaperId, ...formData });
+    console.log("Form Data:", { ipdId, ...formData });
   };
 
   return (
@@ -137,7 +136,7 @@ const BillingForm = () => {
 
           {/* Item Details (Displayed when item type is selected) */}
           {showItemDetails && (
-            <div className="item-details">
+            <div className="item-details" >
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <h4>Item Details</h4>
                 <button
@@ -177,7 +176,7 @@ const BillingForm = () => {
 
               <button
                 type="button"
-                style={{
+                style={{ 
                   marginTop: "10px",
                   border: "1px solid #6C63FE",
                   backgroundColor: "#6C63FE",
@@ -187,6 +186,7 @@ const BillingForm = () => {
                   borderRadius: "5px",
                   fontSize: "14px",
                   fontWeight: "bold",
+                  // width: "100%",
                   padding: "10px 20px",
                 }}
                 onClick={handleAddItem}
@@ -228,7 +228,6 @@ const BillingForm = () => {
               fontWeight: "bold",
               width: "100%",
             }}
-            type="submit"
           >
             Submit Billing Details
           </button>

@@ -2,13 +2,13 @@ import React from 'react';
 import '/src/assets/css/Dashboard.css';
 
 
-const InsightCards = () => {
+const InsightCards = ({opdCount,ipdCount,patientCount}) => {
   const cards = [
     {
       id: 1,
       icon: 'person_outline',
       title: 'Total Patient Visit Count',
-      value: '1000',
+      value: patientCount,
       note: 'Select start and end date',
     },
     {
@@ -22,15 +22,14 @@ const InsightCards = () => {
       id: 3,
       icon: 'receipt_long',
       title: 'Total IPD Entries',
-      value: '25,024',
+      value: ipdCount,
       note: 'Latest Analytics',
     },
     {
       id: 4,
       icon: 'receipt_long',
       title: 'Total OPD Entries',
-      value: '25,024',
-      note: 'Latest Analytics',
+      value: opdCount !== null ? opdCount : 'Loading...',      note: 'Latest Analytics',
     },
   ];
 

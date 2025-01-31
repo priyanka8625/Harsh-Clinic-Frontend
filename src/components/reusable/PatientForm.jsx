@@ -1,32 +1,41 @@
 import React, { useState } from "react";
 import "/src/assets/css/Form.css";
-
+import { AddPatient } from "../../services/user-service";
+//admin id mapping 
 const PatientForm = () => {
   const [formData, setFormData] = useState({
-    casePaperId: "", // Will be auto-generated
+ // casePaperId: "", // Will be auto-generated
     name: "",
-    mobileNumber: "",
+    mobile: "",
     address: "",
     gender: "",
-    adminId: "", // Admin ID will be handled separately
     status: "Active", // Default status set to "Active"
     notes: "",
+    regDate:"",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Validation check for empty fields
-    const { name, mobileNumber, address, gender, notes } = formData;
+    const { name, mobile, address, gender, status, notes } = formData;
 
-    if (!name || !mobileNumber || !address || !gender || !notes) {
+    if (!name || !mobile || !address || !gender || !status){
       alert("All fields are required!");
       return; // Prevent submission if fields are empty
     }
+    console.log(JSON.stringify("data being sent ",formData));
 
-    // If validation passes
-    alert("Patient registered successfully");
-    console.log("Form Data:", formData); // For debugging or further processing
+    AddPatient(formData)
+    .then((resp)=>{
+      console.log(JSON.stringify("data succ",formData));
+      console.log("Patient registered successfully",resp);
+    })
+    .catch((error)=>{
+      console.log(JSON.stringify("data err",formData));
+      console.error("Error adding patient:", error);
+    })
+  
   };
 
   const handleInputChange = (e) => {
@@ -64,8 +73,8 @@ const PatientForm = () => {
             <label htmlFor="mobileNumber" className="entries-form-label">Mobile Number</label>
             <input
               type="text"
-              id="mobileNumber"
-              name="mobileNumber"
+              id="mobile"
+              name="mobile"
               className="entries-form-input"
               placeholder="Enter mobile number"
               value={formData.mobileNumber}
@@ -102,6 +111,19 @@ const PatientForm = () => {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
+          </div>
+
+          {/* Registration Date */}
+          <div className="entries-form-group">
+            <label htmlFor="registrationDate" className="entries-form-label">Registration Date</label>
+            <input
+              type="date"
+              id="regDate"
+              name="regDate"
+              className="entries-form-input"
+              value={formData.registrationDate}
+              onChange={handleInputChange}
+            />
           </div>
 
           {/* Status */}

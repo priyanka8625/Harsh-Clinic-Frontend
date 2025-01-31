@@ -1,61 +1,72 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useState } from "react";
 import "/src/assets/css/Form.css";
-import { useLocation } from "react-router-dom";
-
+import { AddIpdRecord } from "../../services/user-service";
+//error
 const IPDForm = () => {
-  const location = useLocation();
   const [formData, setFormData] = useState({
     ipdId: "",
     casePaperId: "",
     admissionDate: "",
     dischargeDate: "",
-    amount: "",
+    
+   // amount: "",
     notes: "",
   });
 
-  const [isUpdateMode, setIsUpdateMode] = useState(false);
-
-  useEffect(() => {
-    if (location.state && location.state.ipdData) {
-      const ipdData = location.state.ipdData;
-
-      setFormData({
-        ipdId: ipdData.ipdId || "",
-        casePaperId: ipdData.casePaperId || "",
-        admissionDate: ipdData.admissionDate
-          ? new Date(ipdData.admissionDate).toISOString().split("T")[0]
-          : "",
-        dischargeDate: ipdData.dischargeDate
-          ? new Date(ipdData.dischargeDate).toISOString().split("T")[0]
-          : "",
-        amount: ipdData.amount || "",
-        notes: ipdData.notes || "",
-      });
-
-      setIsUpdateMode(true);
-    } else if (location.state && location.state.casePaperId) {
-      setFormData((prevData) => ({
-        ...prevData,
-        casePaperId: location.state.casePaperId,
-      }));
-    }
-  }, [location.state]);
-
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+  //   const getAdminFromSession = () => {
+  //     const adminId = sessionStorage.getItem("adminId");
+  //     console.log("Retrieved adminId:", adminId); // Debug output
+  //     return adminId;
+  //   };
 
-    const { ipdId, casePaperId, admissionDate, dischargeDate, amount, notes } = formData;
 
-    if (!ipdId || !casePaperId || !admissionDate || !dischargeDate || !amount || !notes) {
+    
+  //   const { ipdId, casePaperId, admissionDate, dischargeDate, notes  } = formData;
+  //   const adminId = getAdminFromSession();
+  // //  const adminId = getAdminFromSession();
+  //   if (!adminId) {
+  //     console.error("adminId not found in sessionStorage",adminId);
+  //     return;
+  //   }
+    
+    if (!ipdId || !casePaperId || !admissionDate || !dischargeDate || !notes ) {
       alert("All fields are required!");
       return;
     }
+    
+    const formattedData = {
+      ...formData,
+      ipdId: formData.ipdId ? Number(formData.ipdId) : null,
+      casePaperId: formData.casePaperId ? Number(formData.casePaperId) : null,
+    };
+    if (!formattedData.ipdId || !formattedData.casePaperId) {
+      alert("IPD ID and Case Paper ID must be valid numbers!");
+      return;
+    }
+    
 
-    const action = isUpdateMode ? "updated" : "added";
-    alert(`Data successfully ${action}`);
-    console.log(`${action.charAt(0).toUpperCase() + action.slice(1)} Data:`, formData);
+    console.log("Form Data being sent:", JSON.stringify(formattedData));
+
+    AddIpdRecord(formattedData)
+    .then((resp)=>{
+      console.log(JSON.stringify("data succ",formattedData));
+      console.log("Ipd Record added successfully",resp);
+    })
+    .catch((error)=>{
+      console.log(JSON.stringify("data fail",formattedData));
+
+      console.error("Error adding patient:", error);
+    })
+    // alert("Data submitted successfully");
+    // console.log("Submitted Data:", formData);
   };
-
+ 
+  
+  
+  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -66,40 +77,45 @@ const IPDForm = () => {
 
   return (
     <div>
-      <h6 className="entries-title">
-        {isUpdateMode ? "Update IPD Record" : "Enter New IPD Record"}
-      </h6>
+      {/* Form Title */}
+      <h6 className="entries-title">Enter New IPD Record</h6>
 
+      {/* Form Container */}
       <div className="entries-container">
         <form onSubmit={handleSubmit} className="entries-form">
+          {/* IPD ID */}
           <div className="entries-form-group">
             <label htmlFor="ipdId" className="entries-form-label">
               IPD ID
             </label>
             <input
-              type="text"
+              type="number"
               id="ipdId"
               name="ipdId"
               className="entries-form-input"
+              placeholder="Enter ID"
               value={formData.ipdId}
-              readOnly={isUpdateMode}
+              onChange={handleInputChange}
             />
           </div>
 
+          {/* Case Paper Number */}
           <div className="entries-form-group">
             <label htmlFor="casePaperId" className="entries-form-label">
               Case Paper No
             </label>
             <input
-              type="text"
+              type="number"
               id="casePaperId"
               name="casePaperId"
               className="entries-form-input"
+              placeholder="Enter case paper no."
               value={formData.casePaperId}
-              readOnly={isUpdateMode}
+              onChange={handleInputChange}
             />
           </div>
 
+          {/* Admission Date */}
           <div className="entries-form-group">
             <label htmlFor="admissionDate" className="entries-form-label">
               Admission Date
@@ -114,6 +130,7 @@ const IPDForm = () => {
             />
           </div>
 
+          {/* Discharge Date */}
           <div className="entries-form-group">
             <label htmlFor="dischargeDate" className="entries-form-label">
               Discharge Date
@@ -128,6 +145,7 @@ const IPDForm = () => {
             />
           </div>
 
+          {/* Amount
           <div className="entries-form-group">
             <label htmlFor="amount" className="entries-form-label">
               Amount
@@ -137,11 +155,13 @@ const IPDForm = () => {
               id="amount"
               name="amount"
               className="entries-form-input"
+              placeholder="Enter amount"
               value={formData.amount}
               onChange={handleInputChange}
             />
-          </div>
+          </div> */}
 
+          {/* Notes */}
           <div className="entries-form-group">
             <label htmlFor="notes" className="entries-form-label">
               Notes
@@ -150,27 +170,30 @@ const IPDForm = () => {
               id="notes"
               name="notes"
               className="entries-form-input"
+              placeholder="Enter notes"
               value={formData.notes}
               onChange={handleInputChange}
               rows="3"
             ></textarea>
           </div>
-
-          <button
+          
+          {/* Submit Button */}
+            <button
             style={{
-              marginTop: "30px",
-              padding: "10px 20px",
-              border: "1px solid #6C63FE",
-              backgroundColor: "#6C63FE",
-              color: "#fff",
-              cursor: "pointer",
-              transition: "background-color 0.3s ease",
-              borderRadius: "5px",
-              fontSize: "16px",
-              width: "100%",
+              marginTop: '30px',
+              padding: '10px 20px',
+              border: '1px solid #6C63FE',
+              backgroundColor: '#6C63FE',
+              color: '#fff',
+              cursor: 'pointer',
+              transition: 'background-color 0.3s ease',
+              borderRadius: '5px',
+              fontSize: '16px',
+              fontStyle: 'bold',
+              width:'100%'
             }}
           >
-            {isUpdateMode ? "Update Record" : "Add Record"}
+            Add record
           </button>
         </form>
       </div>

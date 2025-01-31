@@ -1,58 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "/src/assets/css/Form.css";
 import { useLocation } from "react-router-dom";
+import { AddConsumedItemRecord } from "../../services/user-service";
 
 const ConsumedItemsForm = () => {
   const location = useLocation();
   const ipdId = location.state?.ipdId || "";
-  const opdId = location.state?.opdId || "";
 
-  const isIPD = !!ipdId; // Determine if it's an IPD record
-  const initialFormData = isIPD
-    ? { ipdId, selectedItems: [], totalCost: 0 }
-    : { opdId, selectedItems: [], totalCost: 0 };
+  const [formData, setFormData] = useState({
+    ipdId,
+    selectedItems: [],
+    totalCost: 0,
+    quantity:"",
+    itemId:""
 
-  const [formData, setFormData] = useState(initialFormData);
+  });
 
-  const [itemList] = useState([
-    "Medicine",
-    "Test",
-    "Surgery",
-    "Room Charges",
-    "Consultation Fee",
-  ]); // Predefined list of items
+  // item name varun item id ghyaychay
 
+  const [itemList, setItemList] = useState([]); // Store fetched items
   const [showItemDetails, setShowItemDetails] = useState(false);
   const [currentItem, setCurrentItem] = useState({
     itemType: "",
     quantity: "",
-    mrpAmount: "",
+    price: 0,
   });
+
+
+  console.log("data being sent",formData)
+  // Fetch item list from API
+  useEffect(() => {
+    axios
+      .get("http://localhost:8086/item/all") // Replace with actual API
+      .then((response) => {
+        if (response.data) {
+          setItemList(response.data); // Assuming response is an array of objects { id, name, price }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
+      });
+  }, []);
 
   const handleItemChange = (e) => {
     const { name, value } = e.target;
-    setCurrentItem((item) => ({
-      ...item,
-      [name]: value,
-    }));
+
+    if (name === "itemType") {
+      const selectedItem = itemList.find((item) => item.name === value);
+      setCurrentItem({
+        itemType: value,
+        itemId: selectedItem ? selectedItem.id : "", // Store item ID
+        quantity: "",
+        price: selectedItem ? selectedItem.price : 0,
+      });
+    }
+    else {
+      setCurrentItem((item) => ({
+        ...item,
+        [name]: value,
+      }));
+    }
   };
 
   const handleAddItem = () => {
-    if (!currentItem.itemType || !currentItem.quantity || !currentItem.mrpAmount) {
+    if (!currentItem.itemType || !currentItem.quantity) {
       alert("Please fill in all fields for the item.");
       return;
     }
 
     const newItem = {
       ...currentItem,
-      quantity: parseFloat(currentItem.quantity),
-      mrpAmount: parseFloat(currentItem.mrpAmount),
+      quantity: parseFloat(currentItem.quantity), // Fix here
     };
+    
 
     setFormData((data) => {
       const updatedItems = [...data.selectedItems, newItem];
       const updatedCost = updatedItems.reduce(
-        (total, item) => total + item.quantity * item.mrpAmount,
+        (total, item) => total + item.quantity * item.price,
         0
       );
 
@@ -63,7 +89,7 @@ const ConsumedItemsForm = () => {
       };
     });
 
-    setCurrentItem({ itemType: "", quantity: "", mrpAmount: "" });
+    setCurrentItem({ itemType: "", quantity: "", price: 0 });
     setShowItemDetails(false);
   };
 
@@ -71,7 +97,7 @@ const ConsumedItemsForm = () => {
     setFormData((data) => {
       const updatedItems = data.selectedItems.filter((_, i) => i !== index);
       const updatedCost = updatedItems.reduce(
-        (total, item) => total + item.quantity * item.mrpAmount,
+        (total, item) => total + item.quantity * item.price,
         0
       );
 
@@ -79,6 +105,7 @@ const ConsumedItemsForm = () => {
         ...data,
         selectedItems: updatedItems,
         totalCost: updatedCost,
+        
       };
     });
   };
@@ -86,46 +113,64 @@ const ConsumedItemsForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { selectedItems } = formData;
-
-    if (selectedItems.length === 0) {
+    if (formData.selectedItems.length === 0) {
       alert("Please add at least one item.");
       return;
     }
 
-    // Send form data to the backend
-    alert("Details submitted successfully.");
-    console.log("Form Data:", formData);
+    // Format data for submission
+    const formattedData = {
+      ipdId: formData.ipdId,
+      items: formData.selectedItems.map((item) => ({
+        itemId: item.itemId, // Fix: Use itemId instead of itemName
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      totalCost: formData.totalCost,
+    };
+    
+console.log("formatted dta:",formattedData)
+    // Submit data using Axios
+AddConsumedItemRecord(formattedData) // Replace with actual API
+      .then((resp) => {
+        console.log("Item Record added successfully", resp);
+        alert("Data submitted successfully!");
+      //  setFormData({ ipdId, selectedItems: [], totalCost: 0, }); // Reset form
+      })
+      .catch((error) => {
+        console.error("Error adding item:", error);
+        alert("Failed to submit data!");
+      });
   };
+  // useEffect(() => {
+  //   console.log("Updated formData:", formData);
+  // }, [formData]);
+  
 
   return (
     <div>
-      {/* Title */}
-      <h6 className="entries-title">
-        Add Items for {isIPD ? "IPD" : "OPD"}
-      </h6>
+      <h6 className="entries-title">Add Items for IPD</h6>
 
-      {/* Form Container */}
       <div className="entries-container">
         <form onSubmit={handleSubmit} className="entries-form">
-          {/* ID (Autofilled) */}
           <div className="entries-form-group">
-            <label htmlFor={isIPD ? "ipdId" : "opdId"} className="entries-form-label">
-              {isIPD ? "IPD ID" : "OPD ID"}
+            <label htmlFor="ipdId" className="entries-form-label">
+              IPD ID
             </label>
             <input
               type="text"
-              id={isIPD ? "ipdId" : "opdId"}
-              name={isIPD ? "ipdId" : "opdId"}
+              id="ipdId"
+              name="ipdId"
               className="entries-form-input"
-              value={isIPD ? formData.ipdId : formData.opdId}
+              value={formData.ipdId}
               disabled
             />
           </div>
 
-          {/* Item Type */}
           <div className="entries-form-group">
-            <label htmlFor="itemType" className="entries-form-label">Select Item Type</label>
+            <label htmlFor="itemType" className="entries-form-label">
+              Select Item Type
+            </label>
             <select
               id="itemType"
               name="itemType"
@@ -137,13 +182,14 @@ const ConsumedItemsForm = () => {
               }}
             >
               <option value="">Select an item</option>
-              {itemList.map((item, index) => (
-                <option key={index} value={item}>{item}</option>
+              {itemList.map((item) => (
+                <option key={item.id} value={item.name}>
+                  {item.name}
+                </option>
               ))}
             </select>
           </div>
 
-          {/* Item Details (Displayed when item type is selected) */}
           {showItemDetails && (
             <div className="item-details">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -162,9 +208,10 @@ const ConsumedItemsForm = () => {
                   &times;
                 </button>
               </div>
-
               <div className="entries-form-group">
-                <label htmlFor="quantity" className="entries-form-label">Quantity</label>
+                <label htmlFor="quantity" className="entries-form-label">
+                  Quantity
+                </label>
                 <input
                   type="number"
                   id="quantity"
@@ -172,19 +219,6 @@ const ConsumedItemsForm = () => {
                   className="entries-form-input"
                   placeholder="Enter quantity"
                   value={currentItem.quantity}
-                  onChange={handleItemChange}
-                />
-              </div>
-
-              <div className="entries-form-group">
-                <label htmlFor="mrpAmount" className="entries-form-label">MRP Amount</label>
-                <input
-                  type="number"
-                  id="mrpAmount"
-                  name="mrpAmount"
-                  className="entries-form-input"
-                  placeholder="Enter MRP amount"
-                  value={currentItem.mrpAmount}
                   onChange={handleItemChange}
                 />
               </div>
@@ -197,10 +231,7 @@ const ConsumedItemsForm = () => {
                   backgroundColor: "#6C63FE",
                   color: "#fff",
                   cursor: "pointer",
-                  transition: "background-color 0.3s ease",
                   borderRadius: "5px",
-                  fontSize: "14px",
-                  fontWeight: "bold",
                   padding: "10px 20px",
                 }}
                 onClick={handleAddItem}
@@ -210,26 +241,32 @@ const ConsumedItemsForm = () => {
             </div>
           )}
 
-          {/* Selected Items List */}
           <div className="selected-items">
             <h4>Selected Items</h4>
             {formData.selectedItems.map((item, index) => (
               <div key={index} className="item-entry">
-                <span>{`${item.itemType} - Quantity: ${item.quantity}, MRP: ₹${item.mrpAmount}`}</span>
+                <span>{`${item.itemType} - Quantity: ${item.quantity}, Price: ₹${item.price}`}</span>
                 <button
                   type="button"
-                  style={{ background: "none", border: "none", cursor: "pointer", marginLeft: "10px" }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    marginLeft: "10px",
+                    color: "blue",
+                  }}
                   onClick={() => handleRemoveItem(index)}
                 >
-                  &times;
+                  Cancel
                 </button>
               </div>
             ))}
           </div>
 
-          {/* Total Cost */}
           <div className="entries-form-group">
-            <label htmlFor="totalCost" className="entries-form-label">Total Cost</label>
+            <label htmlFor="totalCost" className="entries-form-label">
+              Total Cost
+            </label>
             <input
               type="text"
               id="totalCost"
@@ -240,7 +277,6 @@ const ConsumedItemsForm = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             style={{
               marginTop: "30px",
@@ -249,7 +285,6 @@ const ConsumedItemsForm = () => {
               backgroundColor: "#6C63FE",
               color: "#fff",
               cursor: "pointer",
-              transition: "background-color 0.3s ease",
               borderRadius: "5px",
               fontSize: "16px",
               fontWeight: "bold",
@@ -257,7 +292,7 @@ const ConsumedItemsForm = () => {
             }}
             type="submit"
           >
-            {isIPD ? "Add IPD Items" : "Add OPD Items"}
+            Add IPD Items
           </button>
         </form>
       </div>

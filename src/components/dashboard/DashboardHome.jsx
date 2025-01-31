@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InsightCards from '../reusable/InsightCards';
 import DataTable from '../reusable/DataTable';
 import '/src/assets/css/Dashboard.css';
+import axios from 'axios';
 
 const DashboardHome = () => {
   const [selectedOption, setSelectedOption] = useState('ipd');
-
-  const tableData = {
+  const [tableData, setTableData] = useState({
     ipd: {
       headers: [
         { key: 'ipdId', label: 'IPD ID' },
@@ -18,44 +18,7 @@ const DashboardHome = () => {
         { key: 'addedOn', label: 'Added On' },
         { key: 'actions', label: 'Actions' },
       ],
-      rows: [
-        {
-          ipdId: 1,
-          casePaperId: 1,
-          admissionDate: '08/12/2024',
-          dischargeDate: '12/12/2024',
-          amount: 2000,
-          adminId: 101,
-          addedOn: '08/12/2024',
-        },
-        {
-          ipdId: 2,
-          casePaperId: 2,
-          admissionDate: '09/12/2024',
-          dischargeDate: '15/12/2024',
-          amount: 3000,
-          adminId: 102,
-          addedOn: '09/12/2024',
-        },
-        {
-          ipdId: 2,
-          casePaperId: 2,
-          admissionDate: '09/12/2024',
-          dischargeDate: '15/12/2024',
-          amount: 3000,
-          adminId: 102,
-          addedOn: '09/12/2024',
-        },
-        {
-          ipdId: 3,
-          casePaperId: 3,
-          admissionDate: '10/12/2024',
-          dischargeDate: '16/12/2024',
-          amount: 2500,
-          adminId: 103,
-          addedOn: '10/12/2024',
-        },
-      ],
+      rows: [], 
     },
     opd: {
       headers: [
@@ -67,55 +30,59 @@ const DashboardHome = () => {
         { key: 'creationDate', label: 'Creation Date' },
         { key: 'adminId', label: 'Admin ID' },
       ],
-      rows: [
-        {
-          opdId: 201,
-          casePaperId: 101,
-          opdDate: '10/12/2024',
-          amount: 500,
-          notes: 'Consultation for fever',
-          creationDate: '10/12/2024',
-          adminId: 1,
-        },
-        {
-          opdId: 202,
-          casePaperId: 102,
-          opdDate: '11/12/2024',
-          amount: 750,
-          notes: 'Routine check-up',
-          creationDate: '11/12/2024',
-          adminId: 2,
-        },
-        {
-          opdId: 203,
-          casePaperId: 103,
-          opdDate: '12/12/2024',
-          amount: 1000,
-          notes: 'Consultation for knee pain',
-          creationDate: '12/12/2024',
-          adminId: 3,
-        },
-        {
-          opdId: 204,
-          casePaperId: 104,
-          opdDate: '13/12/2024',
-          amount: 600,
-          notes: 'Consultation for skin rash',
-          creationDate: '13/12/2024',
-          adminId: 1,
-        },
-        {
-          opdId: 205,
-          casePaperId: 105,
-          opdDate: '14/12/2024',
-          amount: 800,
-          notes: 'General check-up',
-          creationDate: '14/12/2024',
-          adminId: 2,
-        },
-      ],
+      rows: [], 
     },
+  });
+
+  const [opdCount, setOpdCount] = useState(0); 
+  const [ipdCount, setIpdCount] = useState(0);
+  const [patientCount, setPatientCount] = useState(0);
+
+  const fetchData = async (option) => {
+    try {
+      const response = await axios.get(`http://localhost:8086/${option}/all`);
+      const rowsWithActions = response.data.map((row) => ({
+        ...row,
+        actions: option === 'ipd' ? ['Update IPD', 'Add Items for IPD', 'Print Bill'] : ['Add Items for OPD', 'Update OPD'],
+      }));
+
+      setTableData((prevData) => ({
+        ...prevData,
+        [option]: {
+          ...prevData[option],
+          rows: rowsWithActions, 
+        },
+      }));
+    } catch (error) {
+      console.error(`Error fetching ${option} data:`, error);
+    }
   };
+
+  // Fetch counts for OPD, IPD, and Patient
+  const fetchCounts = async () => {
+    try {
+      const opdResponse = await axios.get('http://localhost:8086/opd/all');
+      const ipdResponse = await axios.get('http://localhost:8086/ipd/all');
+      const patientResponse = await axios.get('http://localhost:8086/patient/all');
+      
+      setOpdCount(opdResponse.data.length);
+      setIpdCount(ipdResponse.data.length);
+      setPatientCount(patientResponse.data.length);
+
+      console.log("OPD Count:", opdResponse.data.length);
+      console.log("IPD Count:", ipdResponse.data.length);
+      console.log("Patient Count:", patientResponse.data.length);
+
+    } catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  };
+
+  // Fetch data when component mounts
+  useEffect(() => {
+    fetchCounts(); 
+    fetchData(selectedOption); 
+  }, [selectedOption]);
 
   return (
     <>
@@ -125,8 +92,9 @@ const DashboardHome = () => {
         <input type="date" />
         <input type="date" />
       </div>
-      <InsightCards />
-      
+
+      <InsightCards opdCount={opdCount} ipdCount={ipdCount} patientCount={patientCount} />
+
       <div>
         <button
           style={{
@@ -162,7 +130,6 @@ const DashboardHome = () => {
         </button>
       </div>
 
-      {/* <h2>{selectedOption === 'ipd' ? 'IPD Entries' : 'OPD Entries'}</h2> */}
       <DataTable data={tableData[selectedOption]} />
     </>
   );

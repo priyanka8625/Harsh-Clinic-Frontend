@@ -1,162 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '/src/assets/css/Dashboard.css';
 import DataTable from '../reusable/DataTable';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PatientRegistration = () => {
-  // Data for the registered patient details
-  const patientData = {
+  // State to store patient data
+  const [patientData, setPatientData] = useState({
     headers: [
-      { key: 'casePaperId', label: 'Case Paper ID' },
+      { key: 'patientId', label: 'Case Paper ID' },
       { key: 'name', label: 'Name' },
-      { key: 'mobileNumber', label: 'Mobile Number' },
+      { key: 'mobile', label: 'Mobile Number' },
       { key: 'address', label: 'Address' },
       { key: 'gender', label: 'Gender' },
-      { key: 'registrationDate', label: 'Registration Date' },
-      { key: 'adminId', label: 'Admin ID' },
+      // { key: 'registrationDate', label: 'Registration Date' },
       { key: 'status', label: 'Status' },
       { key: 'notes', label: 'Notes' },
+      { key: 'adminId', label: 'Admin ID' },
       { key: 'actions', label: 'Actions' },
     ],
-    rows: [
-      {
-        casePaperId: 101,
-        name: 'John Doe',
-        mobileNumber: '9876543210',
-        address: '123, Main Street',
-        gender: 'Male',
-        registrationDate: '08/12/2024',
-        adminId: 1,
-        status: 'Active',
-        notes: 'First-time visit',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 102,
-        name: 'Jane Roe',
-        mobileNumber: '8765432109',
-        address: '456, Oak Avenue',
-        gender: 'Female',
-        registrationDate: '09/12/2024',
-        adminId: 2,
-        status: 'Inactive',
-        notes: 'Follow-up pending',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 103,
-        name: 'Sam Smith',
-        mobileNumber: '7654321098',
-        address: '789, Pine Road',
-        gender: 'Non-binary',
-        registrationDate: '10/12/2024',
-        adminId: 3,
-        status: 'Active',
-        notes: 'Routine check-up',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 103,
-        name: 'Sam Smith',
-        mobileNumber: '7654321098',
-        address: '789, Pine Road',
-        gender: 'Non-binary',
-        registrationDate: '10/12/2024',
-        adminId: 3,
-        status: 'Active',
-        notes: 'Routine check-up',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 103,
-        name: 'Sam Smith',
-        mobileNumber: '7654321098',
-        address: '789, Pine Road',
-        gender: 'Non-binary',
-        registrationDate: '10/12/2024',
-        adminId: 3,
-        status: 'Active',
-        notes: 'Routine check-up',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 103,
-        name: 'Sam Smith',
-        mobileNumber: '7654321098',
-        address: '789, Pine Road',
-        gender: 'Non-binary',
-        registrationDate: '10/12/2024',
-        adminId: 3,
-        status: 'Active',
-        notes: 'Routine check-up',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 103,
-        name: 'Sam Smith',
-        mobileNumber: '7654321098',
-        address: '789, Pine Road',
-        gender: 'Non-binary',
-        registrationDate: '10/12/2024',
-        adminId: 3,
-        status: 'Active',
-        notes: 'Routine check-up',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 103,
-        name: 'Sam Smith',
-        mobileNumber: '7654321098',
-        address: '789, Pine Road',
-        gender: 'Non-binary',
-        registrationDate: '10/12/2024',
-        adminId: 3,
-        status: 'Active',
-        notes: 'Routine check-up',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-      {
-        casePaperId: 103,
-        name: 'Sam Smith',
-        mobileNumber: '7654321098',
-        address: '789, Pine Road',
-        gender: 'Non-binary',
-        registrationDate: '10/12/2024',
-        adminId: 3,
-        status: 'Active',
-        notes: 'Routine check-up',
-        actions: ['Add IPD', 'Add OPD'],
-      },
-    ],
-  };
-
+    rows: [],
+  });
 
   const navigate = useNavigate();
 
-  const handleOnClick = ()=>{
+  // Function to fetch all patients data using axios
+  const getAllPatients = async () => {
+    try {
+      const response = await axios.get('http://localhost:8086/patient/all'); // Replace with your API endpoint
+      const rows = response.data.map(patient => ({
+        ...patient,
+        actions: ['Add IPD', 'Add OPD', 'Print Bill', 'Add Items for IPD', 'Add Items for OPD'] // Dynamic actions per patient
+      }));
+      setPatientData(prevData => ({
+        ...prevData,
+        rows: rows, // Update rows with dynamic actions
+      }));
+    } catch (error) {
+      console.error("Error fetching patients data:", error);
+    }
+  };
+
+  // Fetch patient data on component mount
+  useEffect(() => {
+    getAllPatients();
+  }, []);
+
+  // Navigate to add patient page
+  const handleOnClick = () => {
     navigate('/dashboard/patient-registration/add');
-  }
+  };
+
   return (
     <>
       <h1>Patient Registration Section</h1>
       <button
-          style={{
-            marginTop: '30px',
-            marginLeft: '30px',
-            padding: '10px 20px',
-            border: '1px solid #6C63FE',
-            backgroundColor: '#6C63FE',
-            color: '#fff',
-            cursor: 'pointer',
-            transition: 'background-color 0.3s ease',
-            borderRadius: '5px',
-            fontSize: '16px',
-            fontStyle: 'bold'
-          }}
+        style={{
+          marginTop: '30px',
+          marginLeft: '30px',
+          padding: '10px 20px',
+          border: '1px solid #6C63FE',
+          backgroundColor: '#6C63FE',
+          color: '#fff',
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease',
+          borderRadius: '5px',
+          fontSize: '16px',
+          fontStyle: 'bold',
+        }}
         onClick={handleOnClick}
-        >
-          Add record
-        </button>
+      >
+        Add Record
+      </button>
       <DataTable data={patientData} />
     </>
   );
