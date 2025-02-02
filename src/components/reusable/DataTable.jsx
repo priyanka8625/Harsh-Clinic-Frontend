@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "/src/assets/css/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 
-const DataTable = ({ data }) => {
+const DataTable = ({ data, parentName }) => {
   const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
   const [filteredRows, setFilteredRows] = useState([]); // State to store filtered rows
   const [actionMenu, setActionMenu] = useState(null); // State to handle action menu visibility
@@ -76,7 +76,7 @@ const DataTable = ({ data }) => {
   }
 
   return (
-    <div className="recent_order">
+    <div className = {parentName===undefined? "recent_order":"recent_order_dashboard"}>
       {/* Search Bar */}
       <div
         style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}

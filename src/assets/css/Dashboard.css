@@ -566,6 +566,11 @@ b{
    flex-grow: 1; /* Fills the remaining space */
    overflow-y: auto; 
 }
+.main-content .recent_order_dashboard{
+  margin-top: 1rem;
+  flex-grow: 1; /* Fills the remaining space */
+  /* overflow-y: auto;  */
+}
 
 .main-content .recent_order table{
   background: var(--clr-white);
@@ -582,6 +587,21 @@ b{
   box-shadow: none;
 }
 
+.main-content .recent_order_dashboard table{
+  background: var(--clr-white);
+  width: 100%;
+  border-radius: var(--card-border-radius) !important;
+  padding: var(--card-padding);
+  text-align: center;
+  box-shadow: var(--box-shadow);
+  transition: all .3s ease;
+  color: var(--clr-dark);
+  /* overflow-y: auto; */
+}
+.main-content .recent_order_dashboard table:hover{
+  box-shadow: none;
+}
+
 .main-content table tbody td{
    height: 3.8rem;
    border-bottom: 1px solid var(--clr-white);
@@ -593,6 +613,11 @@ b{
 
 
 .main-content .recent_order a{
+  text-align: center;
+  display: block;
+  margin: 1rem;
+}
+.main-content .recent_order_dashboard a{
   text-align: center;
   display: block;
   margin: 1rem;

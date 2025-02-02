@@ -129,8 +129,8 @@ const DashboardHome = () => {
           OPD Entries
         </button>
       </div>
+      <DataTable data={tableData[selectedOption]} parentName="dashboard" />
 
-      <DataTable data={tableData[selectedOption]} />
     </>
   );
 };
