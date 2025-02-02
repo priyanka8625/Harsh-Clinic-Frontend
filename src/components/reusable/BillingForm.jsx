@@ -76,6 +76,7 @@ const BillingForm = () => {
 
     // Send form data to the backend
     alert("Billing details submitted successfully.");
+    window.history.back();//go back to prev page
     console.log("Form Data:", { ipdId, ...formData });
   };
 

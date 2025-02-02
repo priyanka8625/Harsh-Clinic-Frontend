@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import "/src/assets/css/Form.css";
 import { AddOpdRecord } from "../../services/user-service";
+import { useNavigate } from "react-router-dom";
 const OPDForm = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     opdId: "",
     casePaperId: "",
@@ -35,9 +38,12 @@ const OPDForm = () => {
        .then((resp)=>{
          console.log(JSON.stringify("data",formattedData));
          console.log("Opd Record added successfully",resp);
+         alert("Opd Record added successfully");
+         navigate("/dashboard/opd-entries");
        })
        .catch((error)=>{
          console.error("Error adding patient:", error);
+         alert("Error adding patient");
        })
   };
 

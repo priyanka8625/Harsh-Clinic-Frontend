@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "/src/assets/css/Form.css";
 import { AddIpdRecord } from "../../services/user-service";
+import { useNavigate } from "react-router-dom";
 //error
 const IPDForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     ipdId: "",
     casePaperId: "",
@@ -54,11 +56,13 @@ const IPDForm = () => {
     .then((resp)=>{
       console.log(JSON.stringify("data succ",formattedData));
       console.log("Ipd Record added successfully",resp);
+      alert("Ipd Record added successfully");
+      navigate("/dashboard/ipd-entries");
     })
     .catch((error)=>{
       console.log(JSON.stringify("data fail",formattedData));
-
       console.error("Error adding patient:", error);
+      alert("Error adding patient");
     })
     // alert("Data submitted successfully");
     // console.log("Submitted Data:", formData);

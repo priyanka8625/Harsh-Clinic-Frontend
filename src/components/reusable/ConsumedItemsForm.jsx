@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "/src/assets/css/Form.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AddConsumedItemRecord } from "../../services/user-service";
 
 const ConsumedItemsForm = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const ipdId = location.state?.ipdId || "";
 
   const [formData, setFormData] = useState({
@@ -129,12 +130,13 @@ const ConsumedItemsForm = () => {
       totalCost: formData.totalCost,
     };
     
-console.log("formatted dta:",formattedData)
-    // Submit data using Axios
-AddConsumedItemRecord(formattedData) // Replace with actual API
+      console.log("formatted dta:",formattedData)
+          // Submit data using Axios
+      AddConsumedItemRecord(formattedData) // Replace with actual API
       .then((resp) => {
         console.log("Item Record added successfully", resp);
         alert("Data submitted successfully!");
+        window.history.back();//go back to prev page
       //  setFormData({ ipdId, selectedItems: [], totalCost: 0, }); // Reset form
       })
       .catch((error) => {

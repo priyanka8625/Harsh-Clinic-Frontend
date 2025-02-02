@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "/src/assets/css/Form.css";
 import { AddItemRecord } from "../../services/user-service"; // API integration
+import { useNavigate } from "react-router-dom";
 
 const ItemsForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     itemName: "",
     discountPerItem: "",
@@ -14,6 +16,7 @@ const ItemsForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
 
     setFormData((prevData) => ({
       ...prevData,
@@ -49,7 +52,8 @@ const ItemsForm = () => {
     AddItemRecord(formattedData)
       .then((resp) => {
         console.log("Item Record added successfully", resp);
-        alert("Data submitted successfully!");
+        alert("Item Record added successfully");
+        navigate("/dashboard/item-details");
       })
       .catch((error) => {
         console.error("Error adding item:", error);

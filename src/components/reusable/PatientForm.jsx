@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import "/src/assets/css/Form.css";
 import { AddPatient } from "../../services/user-service";
+import { useNavigate } from "react-router-dom";
 //admin id mapping 
 const PatientForm = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
  // casePaperId: "", // Will be auto-generated
     name: "",
@@ -30,10 +33,13 @@ const PatientForm = () => {
     .then((resp)=>{
       console.log(JSON.stringify("data succ",formData));
       console.log("Patient registered successfully",resp);
+      alert("Patient registered successfully");
+      navigate("/dashboard/patient-registration");
     })
     .catch((error)=>{
       console.log(JSON.stringify("data err",formData));
       console.error("Error adding patient:", error);
+      alert("Error adding patient");
     })
   
   };
