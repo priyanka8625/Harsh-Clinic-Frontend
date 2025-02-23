@@ -8,11 +8,12 @@ const ItemDetails = () => {
   // State to store item data
   const [itemData, setItemData] = useState({
     headers: [
-      { key: 'itemTypeId', label: 'Item Type ID' },
-      { key: 'discountPercentage', label: 'Discount Percentage' },
-      { key: 'creationDate', label: 'Creation Date' },
-      { key: 'adminId', label: 'Admin ID' },
-      { key: 'status', label: 'Status' },
+      {key:'itemId',label:"Item ID"},
+      { key: 'name', label: 'Item Name' },
+      { key: 'price', label: 'Price' },
+      { key: 'description', label: 'Description' },
+      { key: 'stock', label: 'stock' },
+      { key: 'adminId', label: 'AdminId' },
     ],
     rows: [],
   });

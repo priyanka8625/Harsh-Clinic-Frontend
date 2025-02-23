@@ -1,88 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "/src/assets/css/Form.css";
 import { AddIpdRecord } from "../../services/user-service";
-import { useNavigate } from "react-router-dom";
-//error
+import { useLocation, useNavigate } from "react-router-dom";
+
 const IPDForm = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const ipdId = location.state?.ipdId || "";
+  const casePaperId = location.state?.casePaperId || "";
+
   const [formData, setFormData] = useState({
     ipdId: "",
     casePaperId: "",
     admissionDate: "",
     dischargeDate: "",
-    
-   // amount: "",
     notes: "",
   });
+
+  // Update state when ipdId and casePaperId change
+  useEffect(() => {
+    setFormData((prevData) => ({
+      ...prevData,
+      ipdId: ipdId,
+      casePaperId: casePaperId,
+    }));
+  }, [ipdId, casePaperId]);
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-  //   const getAdminFromSession = () => {
-  //     const adminId = sessionStorage.getItem("adminId");
-  //     console.log("Retrieved adminId:", adminId); // Debug output
-  //     return adminId;
-  //   };
 
+    const { ipdId, casePaperId, admissionDate, dischargeDate, notes } = formData;
 
-    
-  //   const { ipdId, casePaperId, admissionDate, dischargeDate, notes  } = formData;
-  //   const adminId = getAdminFromSession();
-  // //  const adminId = getAdminFromSession();
-  //   if (!adminId) {
-  //     console.error("adminId not found in sessionStorage",adminId);
-  //     return;
-  //   }
-    
-    if (!ipdId || !casePaperId || !admissionDate || !dischargeDate || !notes ) {
+    // Validation for required fields
+    if (!ipdId || !casePaperId || !admissionDate || !dischargeDate || !notes) {
       alert("All fields are required!");
       return;
     }
-    
+
     const formattedData = {
       ...formData,
-      ipdId: formData.ipdId ? Number(formData.ipdId) : null,
-      casePaperId: formData.casePaperId ? Number(formData.casePaperId) : null,
+      ipdId: Number(formData.ipdId) || null,
+      casePaperId: Number(formData.casePaperId) || null,
     };
+
     if (!formattedData.ipdId || !formattedData.casePaperId) {
       alert("IPD ID and Case Paper ID must be valid numbers!");
       return;
     }
-    
 
-    console.log("Form Data being sent:", JSON.stringify(formattedData));
-
+    // Submitting the IPD record
     AddIpdRecord(formattedData)
-    .then((resp)=>{
-      console.log(JSON.stringify("data succ",formattedData));
-      console.log("Ipd Record added successfully",resp);
-      alert("Ipd Record added successfully");
-      navigate("/dashboard/ipd-entries");
-    })
-    .catch((error)=>{
-      console.log(JSON.stringify("data fail",formattedData));
-      console.error("Error adding patient:", error);
-      alert("Error adding patient");
-    })
-    // alert("Data submitted successfully");
-    // console.log("Submitted Data:", formData);
+      .then((resp) => {
+        console.log("IPD Record added successfully", resp);
+        alert("IPD Record added successfully");
+        navigate("/dashboard/ipd-entries");
+      })
+      .catch((error) => {
+        console.error("Error adding IPD record:", error);
+        alert("Error adding IPD record");
+      });
   };
- 
-  
-  
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((data) => ({
+      ...data,
       [name]: value,
     }));
   };
 
   return (
     <div>
-      {/* Form Title */}
-      <h6 className="entries-title">Enter New IPD Record</h6>
+      {/* Title */}
+      <h6 className="entries-title">Enter a new IPD record</h6>
 
       {/* Form Container */}
       <div className="entries-container">
@@ -93,11 +86,11 @@ const IPDForm = () => {
               IPD ID
             </label>
             <input
-              type="number"
+              type="text"
               id="ipdId"
               name="ipdId"
               className="entries-form-input"
-              placeholder="Enter ID"
+              placeholder="Enter IPD ID"
               value={formData.ipdId}
               onChange={handleInputChange}
             />
@@ -109,7 +102,7 @@ const IPDForm = () => {
               Case Paper No
             </label>
             <input
-              type="number"
+              type="text"
               id="casePaperId"
               name="casePaperId"
               className="entries-form-input"
@@ -149,22 +142,6 @@ const IPDForm = () => {
             />
           </div>
 
-          {/* Amount
-          <div className="entries-form-group">
-            <label htmlFor="amount" className="entries-form-label">
-              Amount
-            </label>
-            <input
-              type="text"
-              id="amount"
-              name="amount"
-              className="entries-form-input"
-              placeholder="Enter amount"
-              value={formData.amount}
-              onChange={handleInputChange}
-            />
-          </div> */}
-
           {/* Notes */}
           <div className="entries-form-group">
             <label htmlFor="notes" className="entries-form-label">
@@ -175,26 +152,26 @@ const IPDForm = () => {
               name="notes"
               className="entries-form-input"
               placeholder="Enter notes"
+              rows="3"
               value={formData.notes}
               onChange={handleInputChange}
-              rows="3"
             ></textarea>
           </div>
-          
+
           {/* Submit Button */}
-            <button
+          <button
             style={{
-              marginTop: '30px',
-              padding: '10px 20px',
-              border: '1px solid #6C63FE',
-              backgroundColor: '#6C63FE',
-              color: '#fff',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s ease',
-              borderRadius: '5px',
-              fontSize: '16px',
-              fontStyle: 'bold',
-              width:'100%'
+              marginTop: "30px",
+              padding: "10px 20px",
+              border: "1px solid #6C63FE",
+              backgroundColor: "#6C63FE",
+              color: "#fff",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              borderRadius: "5px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              width: "100%",
             }}
           >
             Add record

@@ -15,7 +15,6 @@ const DashboardHome = () => {
         { key: 'dischargeDate', label: 'Discharge Date' },
         { key: 'amount', label: 'Amount' },
         { key: 'adminId', label: 'ADMIN ID' },
-        { key: 'addedOn', label: 'Added On' },
         { key: 'actions', label: 'Actions' },
       ],
       rows: [], 
@@ -36,6 +35,7 @@ const DashboardHome = () => {
 
   const [opdCount, setOpdCount] = useState(0); 
   const [ipdCount, setIpdCount] = useState(0);
+  const [itemCount,setItemCount]=useState(0);
   const [patientCount, setPatientCount] = useState(0);
 
   const fetchData = async (option) => {
@@ -43,7 +43,7 @@ const DashboardHome = () => {
       const response = await axios.get(`http://localhost:8086/${option}/all`);
       const rowsWithActions = response.data.map((row) => ({
         ...row,
-        actions: option === 'ipd' ? ['Update IPD', 'Add Items for IPD', 'Print Bill'] : ['Add Items for OPD', 'Update OPD'],
+        actions: option === 'ipd' ? ['Update IPD', 'Add Items for IPD', 'Print Bill'] : [ 'Update OPD'],
       }));
 
       setTableData((prevData) => ({
@@ -64,9 +64,10 @@ const DashboardHome = () => {
       const opdResponse = await axios.get('http://localhost:8086/opd/all');
       const ipdResponse = await axios.get('http://localhost:8086/ipd/all');
       const patientResponse = await axios.get('http://localhost:8086/patient/all');
-      
+      const itemResponse=await axios.get('http://localhost:8086/item/all')
       setOpdCount(opdResponse.data.length);
       setIpdCount(ipdResponse.data.length);
+      setItemCount(itemResponse.data.length);
       setPatientCount(patientResponse.data.length);
 
       console.log("OPD Count:", opdResponse.data.length);
@@ -93,7 +94,7 @@ const DashboardHome = () => {
         <input type="date" />
       </div>
 
-      <InsightCards opdCount={opdCount} ipdCount={ipdCount} patientCount={patientCount} />
+      <InsightCards opdCount={opdCount} ipdCount={ipdCount} patientCount={patientCount} itemCount={itemCount} />
 
       <div>
         <button

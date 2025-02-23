@@ -108,12 +108,12 @@ export const getAllItems = async () => {
     });
   };
 
-  export const getData = async (endpoint) => {
-    try {
-      const response = await api.get(endpoint);
-      return response.data; // Return the data part of the response
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error; // Throw the error to handle it in the calling function
-    }
-  };
+  // export const getData = async (endpoint) => {
+  //   try {
+  //     const response = await api.get(endpoint);
+  //     return response.data; // Return the data part of the response
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     throw error; // Throw the error to handle it in the calling function
+  //   }
+  // };

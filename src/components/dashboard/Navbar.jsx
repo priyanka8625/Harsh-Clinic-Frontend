@@ -13,9 +13,9 @@ const Navbar = () => (
           <p><b>Priyanka</b></p>
           <p>Admin</p>
         </div>
-        <div className="profile-photo">
+        {/* <div className="profile-photo">
           <img src="/src/assets/img/user.png" alt="Profile" />
-        </div>
+        </div> */}
       </div>
     </div>
   </header>

@@ -2,7 +2,7 @@ import React from 'react';
 import '/src/assets/css/Dashboard.css';
 
 
-const InsightCards = ({opdCount,ipdCount,patientCount}) => {
+const InsightCards = ({opdCount,ipdCount,patientCount,itemCount}) => {
   const cards = [
     {
       id: 1,
@@ -15,7 +15,7 @@ const InsightCards = ({opdCount,ipdCount,patientCount}) => {
       id: 2,
       icon: 'local_mall',
       title: 'Total Items',
-      value: '25,024',
+      value: itemCount,
       note: 'Latest Analytics',
     },
     {
