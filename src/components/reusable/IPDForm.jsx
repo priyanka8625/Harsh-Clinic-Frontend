@@ -8,11 +8,11 @@ const IPDForm = () => {
   const navigate = useNavigate();
 
   const ipdId = location.state?.ipdId || "";
-  const casePaperId = location.state?.casePaperId || "";
+  const patientId = location.state?.patientId || "";
 
   const [formData, setFormData] = useState({
     ipdId: "",
-    casePaperId: "",
+    patientId: "",
     admissionDate: "",
     dischargeDate: "",
     notes: "",
@@ -23,18 +23,18 @@ const IPDForm = () => {
     setFormData((prevData) => ({
       ...prevData,
       ipdId: ipdId,
-      casePaperId: casePaperId,
+      patientId: patientId,
     }));
-  }, [ipdId, casePaperId]);
+  }, [ipdId, patientId]);
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { ipdId, casePaperId, admissionDate, dischargeDate, notes } = formData;
+    const { ipdId, patientId, admissionDate, dischargeDate, notes } = formData;
 
     // Validation for required fields
-    if (!ipdId || !casePaperId || !admissionDate || !dischargeDate || !notes) {
+    if (!ipdId || !patientId || !admissionDate || !dischargeDate || !notes) {
       alert("All fields are required!");
       return;
     }
@@ -42,10 +42,10 @@ const IPDForm = () => {
     const formattedData = {
       ...formData,
       ipdId: Number(formData.ipdId) || null,
-      casePaperId: Number(formData.casePaperId) || null,
+      patientId: Number(formData.patientId) || null,
     };
 
-    if (!formattedData.ipdId || !formattedData.casePaperId) {
+    if (!formattedData.ipdId || !formattedData.patientId) {
       alert("IPD ID and Case Paper ID must be valid numbers!");
       return;
     }
@@ -58,7 +58,7 @@ const IPDForm = () => {
         navigate("/dashboard/ipd-entries");
       })
       .catch((error) => {
-        console.error("Error adding IPD record:", error);
+        console.error("Error adding IPD record:", formattedData);
         alert("Error adding IPD record");
       });
   };
@@ -98,16 +98,16 @@ const IPDForm = () => {
 
           {/* Case Paper Number */}
           <div className="entries-form-group">
-            <label htmlFor="casePaperId" className="entries-form-label">
+            <label htmlFor="patientId" className="entries-form-label">
               Case Paper No
             </label>
             <input
               type="text"
-              id="casePaperId"
-              name="casePaperId"
+              id="patientId"
+              name="patientId"
               className="entries-form-input"
               placeholder="Enter case paper no."
-              value={formData.casePaperId}
+              value={formData.patientId}
               onChange={handleInputChange}
             />
           </div>
