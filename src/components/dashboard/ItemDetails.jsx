@@ -9,7 +9,7 @@ const ItemDetails = () => {
   const [itemData, setItemData] = useState({
     headers: [
       {key:'itemId',label:"Item ID"},
-      { key: 'name', label: 'Item Name' },
+      { key: 'itemName', label: 'Item Name' },
       { key: 'price', label: 'Price' },
       { key: 'description', label: 'Description' },
       { key: 'stock', label: 'stock' },
