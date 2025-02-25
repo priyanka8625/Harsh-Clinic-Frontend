@@ -20,9 +20,11 @@ const Login = () => {
     setIsSignUpMode(true);
   };
   
-  const setAdminSession = (adminId) => {
-    sessionStorage.setItem("adminId", adminId);
+  const setAdminSession = (adminData) => {
+    sessionStorage.setItem("adminId", adminData.adminId);
+    sessionStorage.setItem("adminName", adminData.name);
   };
+  
 
  const handleSignInClick = () => {
     //setAdminSession(formData.userId);
@@ -40,40 +42,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = isSignUpMode ? "http://localhost:8086/admin/add" : "http://localhost:8086/admin/login";
-       // const data = isSignUpMode ? { name: formData.name, userId: formData.userId, password: formData.password } : 
-       if(isSignUpMode){
-         const data={ name: formData.name, userId: formData.userId, password: formData.password } 
-         SignUp(data)
-         .then((resp) => {
-           console.log("Sign-up successful:", resp);
-           setIsSignUpMode(false)
-         })
-         .catch((error) => {
-           console.error("Error during signup:", error);
-         });
+  
+    if (!isSignUpMode) {
+        const data = { userId: formData.userId, password: formData.password };
 
-       }
-       else{
-         const data={ userId: formData.userId, password: formData.password };
-   
-   
-       SignIn(data)
-       .then((resp) => {
-        console.log("Sign-in successful:", resp);
-        console.log("Admin ID being set in sessionStorage:",resp.data);
+        SignIn(data)
+            .then((resp) => {
+                console.log("Sign-in successful:", resp.data);
 
-        setAdminSession(resp.data);
-        console.log(sessionStorage.getItem("adminId"));
+                // Save admin session
+                setAdminSession(resp.data);
 
-        navigate('/dashboard');
-       }) 
-       .catch((error) => {
-         console.error("Error during signin:", error);
-       });
-     
-       }
-  };
+                // Ensure session is set before navigating
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 500);
+            })
+            .catch((error) => {
+                console.error("Error during signin:", error);
+                alert(error.response?.data?.error || "Login failed. Please try again.");
+            });
+    }
+};
+
 
   return (
     <>

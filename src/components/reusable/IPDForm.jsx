@@ -8,11 +8,11 @@ const IPDForm = () => {
   const navigate = useNavigate();
 
   const ipdId = location.state?.ipdId || "";
-  const patientId = location.state?.patientId || "";
+  const casePaperId = location.state?.casePaperId || "";
 
   const [formData, setFormData] = useState({
     ipdId: "",
-    patientId: "",
+    casePaperId: "",
     admissionDate: "",
     dischargeDate: "",
     notes: "",
@@ -23,18 +23,18 @@ const IPDForm = () => {
     setFormData((prevData) => ({
       ...prevData,
       ipdId: ipdId,
-      patientId: patientId,
+      casePaperId: casePaperId,
     }));
-  }, [ipdId, patientId]);
+  }, [ipdId, casePaperId]);
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { ipdId, patientId, admissionDate, dischargeDate, notes } = formData;
+    const { ipdId, casePaperId, admissionDate, dischargeDate, notes } = formData;
 
     // Validation for required fields
-    if (!ipdId || !patientId || !admissionDate || !dischargeDate || !notes) {
+    if (!ipdId || !casePaperId || !admissionDate || !dischargeDate || !notes) {
       alert("All fields are required!");
       return;
     }
@@ -42,10 +42,10 @@ const IPDForm = () => {
     const formattedData = {
       ...formData,
       ipdId: Number(formData.ipdId) || null,
-      patientId: Number(formData.patientId) || null,
+      casePaperId: Number(formData.casePaperId) || null,
     };
 
-    if (!formattedData.ipdId || !formattedData.patientId) {
+    if (!formattedData.ipdId || !formattedData.casePaperId) {
       alert("IPD ID and Case Paper ID must be valid numbers!");
       return;
     }
@@ -98,16 +98,16 @@ const IPDForm = () => {
 
           {/* Case Paper Number */}
           <div className="entries-form-group">
-            <label htmlFor="patientId" className="entries-form-label">
+            <label htmlFor="casePaperId" className="entries-form-label">
               Case Paper No
             </label>
             <input
               type="text"
-              id="patientId"
-              name="patientId"
+              id="casePaperId"
+              name="casePaperId"
               className="entries-form-input"
               placeholder="Enter case paper no."
-              value={formData.patientId}
+              value={formData.casePaperId}
               onChange={handleInputChange}
             />
           </div>

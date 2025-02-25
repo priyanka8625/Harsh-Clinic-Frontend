@@ -38,7 +38,7 @@ const PatientForm = () => {
     })
     .catch((error)=>{
       console.log(JSON.stringify("data err",formData));
-      console.error("Error adding patient:", error);
+      console.error("Error adding patient:", formData);
       alert("Error adding patient");
     })
   

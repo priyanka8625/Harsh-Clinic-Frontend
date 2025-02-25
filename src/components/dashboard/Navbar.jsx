@@ -1,24 +1,32 @@
-import React from 'react';
-import '/src/assets/css/Dashboard.css';
+import React, { useState, useEffect } from 'react';
 
+const Navbar = () => {
+  const [adminName, setAdminName] = useState(sessionStorage.getItem("adminName") || '');
 
-const Navbar = () => (
-  <header className="navbar">
-    <div className="logo">
-      <h2>HARSH <span className="success">Clinic</span></h2>
-    </div>
-    <div className="navbar-right">
-      <div className="profile">
-        <div className="info">
-          <p><b>Priyanka</b></p>
-          <p>Admin</p>
-        </div>
-        {/* <div className="profile-photo">
-          <img src="/src/assets/img/user.png" alt="Profile" />
-        </div> */}
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setAdminName(sessionStorage.getItem("adminName"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  return (
+    <header className="navbar">
+      <div className="logo">
+        <h2>HARSH <span className="success">Clinic</span></h2>
       </div>
-    </div>
-  </header>
-);
+      <div className="navbar-right">
+        <div className="profile">
+          <div className="info">
+            <p><b>{adminName || "Loading..."}</b></p>
+            <p>Admin</p>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
 
 export default Navbar;
