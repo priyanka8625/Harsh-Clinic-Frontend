@@ -23,15 +23,18 @@ const ItemDetails = () => {
   // Function to fetch item data using axios
   const getAllItems = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/item/all'); // Replace with your API endpoint
+      const response = await axios.get('http://localhost:8086/item/all'); 
+      console.log("API Response:", response.data); // Debugging output
+  
       setItemData((prevData) => ({
         ...prevData,
-        rows: response.data, // Assuming response.data contains an array of item records
+        rows: response.data, 
       }));
     } catch (error) {
       console.error("Error fetching item data:", error);
     }
   };
+  
 
   // Fetch item data on component mount
   useEffect(() => {
