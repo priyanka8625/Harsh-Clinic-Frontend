@@ -20,7 +20,7 @@ const Navbar = () => {
       <div className="navbar-right">
         <div className="profile">
           <div className="info">
-            <p><b>{adminName || "Loading..."}</b></p>
+            <p><b>{adminName || "ADMIN"}</b></p>
             <p>Admin</p>
           </div>
         </div>

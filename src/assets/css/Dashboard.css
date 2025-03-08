@@ -125,7 +125,7 @@ aside {
   padding-top: 5rem; /* Adjust for fixed navbar */
 }
 
- .sidebar a{
+ .sidebar .sidebar-link{
   display: flex;
   color: var(--clr-info-dark);
   margin-left: 2rem;
@@ -136,30 +136,30 @@ aside {
  
  }
 
-  .sidebar a span{
+  .sidebar .sidebar-link span{
   font-size: 1.6rem;
   transition: all .3s ease-in-out;
   
  }
 
-  .sidebar a:last-child{
+  .sidebar .sidebar-link:last-child{
   position: absolute;
   bottom: 1rem; 
   width: 100%;
  }
 
-  .sidebar a.active{
+  .sidebar .sidebar-link.active{
    background-color: var(--clr-light);
    color: var(--clr-primary);
    margin-left: 0;
    border-left: 5px solid var(--clr-primary);
    margin-left: calc(1rem - 3px);
  }
-  .sidebar a:hover span{
+  .sidebar .sidebar-link:hover span{
   margin-left: 1rem;
  }
 
-  .sidebar a span.msg_count{
+  .sidebar .sidebar-link span.msg_count{
    background-color: var(--clr-danger);
    color: var(--clr-white);
    padding: 2px 5px;
