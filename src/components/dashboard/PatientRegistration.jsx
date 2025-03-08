@@ -30,7 +30,7 @@ const PatientRegistration = () => {
       const response = await axios.get('http://localhost:8086/patient/all'); // Replace with your API endpoint
       const rows = response.data.map(patient => ({
         ...patient,
-        actions: ['Add IPD', 'Add OPD', 'Print Bill', 'Add Items for IPD'] // Dynamic actions per patient
+        actions: ['Add IPD', 'Add OPD', 'Print Bill'] // Dynamic actions per patient
       }));
       setPatientData(prevData => ({
         ...prevData,
