@@ -245,7 +245,24 @@ const DataTable = ({ data, parentName }) => {
               } 
             });
             break;
-          
+        case "Update item":
+          navigate("/dashboard/item-details/update", 
+            { state: { item: row} },
+          );
+          break;
+        case "Delete item":
+          if (window.confirm("Are you sure? You want to delete this item?")) {
+            // Remove item from state
+            setFilteredRows((prevRows) =>
+              prevRows.filter((item) => item.itemId !== row.itemId)
+            );
+    
+            // Call delete API (commented for now)
+            // axios.delete(`http://localhost:8086/item/delete/${row.itemId}`)
+            //   .then(() => console.log("Item deleted successfully"))
+            //   .catch((error) => console.error("Error deleting item:", error));
+          }
+          break;
       default:
         console.warn("Unknown action:", action);
     }

@@ -63,6 +63,21 @@ export const AddItemRecord=async(item)=>{
     })
 }
 
+export const UpdateItemRecord=async(item)=>{
+  try {
+    const response = await myAxios.put(`/item/update/${item.itemId}`, item, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return response.data; // Return response data
+  } catch (error) {
+    console.error("Error updating item:", error);
+    throw error; // Re-throw error for handling in calling function
+  }
+}
+
 export const AddConsumedItemRecord=async(item)=>{
   return myAxios.post("/consumedItems/add",item,{
       headers:{

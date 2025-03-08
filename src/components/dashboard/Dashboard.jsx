@@ -31,6 +31,7 @@ const Dashboard = () => {
             <Route path="/ipd-entries/add" element={<IPDForm />} />
             <Route path="/opd-entries/add" element={<OPDForm />} />
             <Route path="/item-details/add" element={<ItemsForm />} />
+            <Route path="/item-details/update" element={<ItemsForm />} />
             <Route path="/billing" element={<BillingForm />} />
             <Route path="/consumed-items/add" element={<ConsumedItemsForm />} />
           </Routes>

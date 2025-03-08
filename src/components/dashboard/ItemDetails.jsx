@@ -7,16 +7,46 @@ import { useNavigate } from 'react-router-dom';
 const ItemDetails = () => {
   // State to store item data
   const [itemData, setItemData] = useState({
-    headers: [
-      {key:'itemId',label:"Item ID"},
-      { key: 'itemName', label: 'Item Name' },
-      { key: 'price', label: 'Price' },
-      { key: 'description', label: 'Description' },
-      { key: 'stock', label: 'stock' },
-      { key: 'adminId', label: 'AdminId' },
+    "headers": [
+      { "key": "itemId", "label": "Item ID" },
+      { "key": "itemName", "label": "Item Name" },
+      { "key": "price", "label": "Price" },
+      { "key": "description", "label": "Description" },
+      { "key": "stock", "label": "Stock" },
+      { "key": "adminId", "label": "Admin ID" },
+      { "key": "actions", "label": "Actions" }
     ],
-    rows: [],
-  });
+    "rows": [
+      {
+        "itemId": "101",
+        "itemName": "Wireless Mouse",
+        "price": "15.99",
+        "description": "Ergonomic wireless mouse with long battery life",
+        "stock": "25",
+        "adminId": "A001",
+        "actions": ["Update item", "Delete item"]
+      },
+      {
+        "itemId": "102",
+        "itemName": "Mechanical Keyboard",
+        "price": "49.99",
+        "description": "RGB backlit mechanical keyboard with blue switches",
+        "stock": "15",
+        "adminId": "A002",
+        "actions": ["Update item", "Delete item"]
+      },
+      {
+        "itemId": "103",
+        "itemName": "Gaming Headset",
+        "price": "29.99",
+        "description": "Surround sound gaming headset with noise cancellation",
+        "stock": "30",
+        "adminId": "A003",
+        "actions": ["Update item", "Delete item"]
+      }
+    ]
+  }
+  );
 
   const navigate = useNavigate();
 

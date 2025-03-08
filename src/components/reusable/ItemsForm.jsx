@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "/src/assets/css/Form.css";
-import { AddItemRecord } from "../../services/user-service"; // API integration
-import { useNavigate } from "react-router-dom";
+import { AddItemRecord, UpdateItemRecord } from "../../services/user-service"; // API integration
 
 const ItemsForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const existingItem = location.state?.item || null; // Get item details if updating
+
   const [formData, setFormData] = useState({
     itemName: "",
     discountPerItem: "",
@@ -14,10 +17,23 @@ const ItemsForm = () => {
     status: "active",
   });
 
+  // Prefill form if updating
+  useEffect(() => {
+    if (existingItem) {
+      setFormData({
+        itemId: existingItem.itemId, // Keep track of itemId for update
+        itemName: existingItem.itemName,
+        discountPerItem: existingItem.discountPerItem,
+        price: existingItem.price,
+        description: existingItem.description,
+        stock: existingItem.stock,
+        status: existingItem.status,
+      });
+    }
+  }, [existingItem]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
-
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -26,12 +42,10 @@ const ItemsForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { itemId, itemName, discountPerItem, price, description, stock, status } = formData;
 
-    const { itemName, discountPerItem, price, description, stock, status } = formData;
-
-    // Validation
-    if (!itemName.trim() || !discountPerItem.trim() || !price.trim() || !stock.trim()  && stock.value>0) {
-      alert("All fields are required!");
+    if (!itemName.trim() || !price.trim() || !stock.trim() || stock <= 0) {
+      alert("All fields are required and stock must be greater than 0!");
       return;
     }
 
@@ -49,21 +63,36 @@ const ItemsForm = () => {
 
     console.log("Form Data being sent:", JSON.stringify(formattedData));
 
-    AddItemRecord(formattedData)
-      .then((resp) => {
-        console.log("Item Record added successfully", resp);
-        alert("Item Record added successfully");
-        navigate("/dashboard/item-details");
-      })
-      .catch((error) => {
-        console.error("Error adding item:", formattedData);
-        alert("Failed to submit data!");
-      });
+    if (existingItem) {
+      // Update item
+      // UpdateItemRecord(formattedData)
+      //   .then((resp) => {
+      //     console.log("Item updated successfully", resp);
+          alert("Item updated successfully");
+      //     navigate("/dashboard/item-details");
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error updating item:", error);
+      //     alert("Failed to update item!");
+      //   });
+    } else {
+      // Add new item
+      AddItemRecord(formattedData)
+        .then((resp) => {
+          console.log("Item added successfully", resp);
+          alert("Item added successfully");
+          navigate("/dashboard/item-details");
+        })
+        .catch((error) => {
+          console.error("Error adding item:", error);
+          alert("Failed to add item!");
+        });
+    }
   };
 
   return (
     <div>
-      <h6 className="entries-title">Item Entries</h6>
+      <h6 className="entries-title">{existingItem ? "Update Item" : "Add New Item"}</h6>
       <div className="entries-container">
         <form onSubmit={handleSubmit} className="entries-form">
           <div className="entries-form-group">
@@ -176,7 +205,7 @@ const ItemsForm = () => {
               width: "100%",
             }}
           >
-            Add Record
+            {existingItem ? "Update Record" : "Add Record"}
           </button>
         </form>
       </div>
@@ -184,5 +213,4 @@ const ItemsForm = () => {
   );
 };
 
-export default ItemsForm;  
-
+export default ItemsForm;
