@@ -44,7 +44,7 @@ const ItemsForm = () => {
     e.preventDefault();
     const { itemId, itemName, discountPerItem, price, description, stock, status } = formData;
 
-    if (!itemName.trim() || !price.trim() || !stock.trim() || stock <= 0) {
+    if (!itemName.trim()|| stock <= 0) {
       alert("All fields are required and stock must be greater than 0!");
       return;
     }
@@ -65,16 +65,16 @@ const ItemsForm = () => {
 
     if (existingItem) {
       // Update item
-      // UpdateItemRecord(formattedData)
-      //   .then((resp) => {
-      //     console.log("Item updated successfully", resp);
+      UpdateItemRecord(formattedData)
+        .then((resp) => {
+          console.log("Item updated successfully", resp);
           alert("Item updated successfully");
-      //     navigate("/dashboard/item-details");
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error updating item:", error);
-      //     alert("Failed to update item!");
-      //   });
+          navigate("/dashboard/item-details");
+        })
+        .catch((error) => {
+          console.error("Error updating item:", error);
+          alert("Failed to update item!");
+        });
     } else {
       // Add new item
       AddItemRecord(formattedData)
