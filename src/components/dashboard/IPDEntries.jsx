@@ -14,7 +14,7 @@ const IPDEntries = () => {
       { key: 'dischargeDate', label: 'Discharge Date' },
       { key: 'amount', label: 'Amount' },
       { key: 'adminId', label: 'ADMIN ID' },
-      { key: 'addedOn', label: 'Added On' },
+      { key: 'admissionDate', label: 'Added On' },
       { key: 'actions', label: 'Actions' }, // Actions column
     ],
     rows: [], // Empty initially, will be populated with data
@@ -25,12 +25,12 @@ const IPDEntries = () => {
   // Function to fetch IPD data using axios
   const fetchIPDData = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/ipd/all'); // Replace with your API endpoint
+      const response = await axios.get('http://localhost:8086/ipd/all',{withCredentials:true}); // Replace with your API endpoint
 
       // Mapping through the response data to add actions dynamically
       const rowsWithActions = response.data.map((row) => ({
         ...row,
-        actions: ['Update IPD', 'Add Items for IPD', 'Print Bill'], // Example dynamic actions
+        actions: ['Update IPD', 'Add Items for IPD', 'Print Bill','Add Items for IPD'], // Example dynamic actions
       }));
 
       // Update the rows in the state with actions

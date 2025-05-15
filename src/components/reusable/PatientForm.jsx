@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "/src/assets/css/Form.css";
 import { AddPatient } from "../../services/user-service";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 //admin id mapping 
 const PatientForm = () => {
   const navigate = useNavigate();

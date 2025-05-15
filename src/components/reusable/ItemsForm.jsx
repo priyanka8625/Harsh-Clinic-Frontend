@@ -14,7 +14,7 @@ const ItemsForm = () => {
     price: "",
     description: "",
     stock: "",
-    status: "active",
+    // status: "active",
   });
 
   // Prefill form if updating
@@ -161,7 +161,7 @@ const ItemsForm = () => {
           </div>
 
           {/* Status Selection */}
-          <div className="entries-form-group">
+   {/* /*       <div className="entries-form-group">
             <h3 className="entries-form-label">Select Status</h3>
             <div className="entries-form-radio">
               <label>
@@ -186,7 +186,7 @@ const ItemsForm = () => {
                 Inactive
               </label>
             </div>
-          </div>
+          </div> */}
 
           {/* Submit Button */}
           <button

@@ -14,7 +14,7 @@ const OPDForm = () => {
     opdId: "",
     casePaperId: "",
     opdDate: "",
-    amount: "",
+    totalAmount: "",
     notes: "",
   });
 
@@ -31,9 +31,9 @@ const OPDForm = () => {
     e.preventDefault();
 
     // Validation check for empty fields
-    const { opdId, casePaperId, opdDate, amount, notes } = formData;
+    const { opdId, casePaperId, opdDate, totalAmount, notes } = formData;
 
-    if (!opdId || !casePaperId || !opdDate || !amount || !notes) {
+    if (!opdId || !casePaperId || !opdDate || !totalAmount || !notes) {
       alert("All fields are required!");
       return; // Prevent submission if fields are empty
     }
@@ -127,16 +127,16 @@ const OPDForm = () => {
 
           {/* Amount */}
           <div className="entries-form-group">
-            <label htmlFor="amount" className="entries-form-label">
+            <label htmlFor="totalAmount" className="entries-form-label">
               Amount
             </label>
             <input
               type="text"
-              id="amount"
-              name="amount"
+              id="totalAmount"
+              name="totalAmount"
               className="entries-form-input"
               placeholder="Enter amount"
-              value={formData.amount}
+              value={formData.totalAmount}
               onChange={handleInputChange}
             />
           </div>

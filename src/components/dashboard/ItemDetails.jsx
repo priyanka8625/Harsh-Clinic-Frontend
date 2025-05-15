@@ -11,6 +11,7 @@ const ItemDetails = () => {
       { key: 'itemId', label: 'Item ID' },
       { key: 'itemName', label: 'Item Name' },
       { key: 'price', label: 'Price' },
+      {key :'discountPerItem', label:'discount'},
       { key: 'description', label: 'Description' },
       { key: 'stock', label: 'Stock' },
       { key: 'adminId', label: 'Admin ID' },
@@ -24,7 +25,9 @@ const ItemDetails = () => {
   // Function to fetch item data using axios
   const fetchItemData = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/item/all');
+      const response = await axios.get('http://localhost:8086/item/all',{
+        withCredentials: true,
+      });
       const rowsWithActions = response.data.map((row) => ({
         ...row,
         actions: ['Update item', 'Delete item'],

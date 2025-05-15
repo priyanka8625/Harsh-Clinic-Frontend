@@ -215,14 +215,15 @@ const DataTable = ({ data, parentName }) => {
     // Perform navigation based on the action
     switch (action) {
       case "Add IPD":
-        navigate("/dashboard/ipd-entries/add", { state: { ipdId: row.ipdId,casePaperId: row.casePaperId } });
+        navigate("/dashboard/ipd-entries/add", { state: { ipdId: row.ipdId,casePaperId: row.casePaperId || row.patientId } });
         break;
       case "Add OPD":
-        navigate("/dashboard/opd-entries/add", { state: {opdId: row.opdId, casePaperId: row.casePaperId } });
+        navigate("/dashboard/opd-entries/add", { state: {opdId: row.opdId, casePaperId: row.casePaperId || row.patientId} });
         break;
       case "Print Bill":
         navigate("/dashboard/billing/", { state: { ipdId: row.ipdId, casePaperId: row.casePaperId } });
         break;
+        
       case "Add Items for IPD":
         navigate("/dashboard/consumed-items/add", {
           state: { ipdId: row.ipdId},

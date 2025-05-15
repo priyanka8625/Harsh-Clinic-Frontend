@@ -15,7 +15,7 @@ const PatientRegistration = () => {
       { key: 'gender', label: 'Gender' },
       // { key: 'registrationDate', label: 'Registration Date' },
       { key: 'status', label: 'Status' },
-      { key: 'notes', label: 'Notes' },
+      // { key: 'notes', label: 'Notes' },
       { key: 'adminId', label: 'Admin ID' },
       { key: 'actions', label: 'Actions' },
     ],
@@ -27,7 +27,9 @@ const PatientRegistration = () => {
   // Function to fetch all patients data using axios
   const getAllPatients = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/patient/all'); // Replace with your API endpoint
+      const response = await axios.get('http://localhost:8086/patient/all',{
+        withCredentials: true,
+      }); // Replace with your API endpoint
       const rows = response.data.map(patient => ({
         ...patient,
         actions: ['Add IPD', 'Add OPD', 'Print Bill'] // Dynamic actions per patient
