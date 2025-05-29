@@ -1,3 +1,4 @@
+import Login from "./Login"
 const Home = () => {
   const logOut = async () => {
     try {
@@ -9,7 +10,7 @@ const Home = () => {
   };
   return (
     <>
-     Home
+     <Login/>
     </>
   );
 };
