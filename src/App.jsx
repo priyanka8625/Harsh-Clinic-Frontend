@@ -8,7 +8,7 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 function App() {
   return (
     <>
-<BrowserRouter basename="/subpath">
+<BrowserRouter>
   <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/register" element={<Register />} />
