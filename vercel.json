@@ -4,8 +4,12 @@
       "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "/subpath/assets/(.*)",
+      "dest": "/subpath/dist/assets/$1"
+    },
+    {
+      "src": "/subpath/(.*)",
+      "dest": "/subpath/index.html"
     }
   ]
 }
