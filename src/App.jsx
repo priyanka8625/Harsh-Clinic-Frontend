@@ -8,14 +8,14 @@ import Dashboard from './components/dashboard/Dashboard.jsx';
 function App() {
   return (
     <>
-      <Router>
+      <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/dashboard/*" element={<Dashboard />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </>
   );
 }
