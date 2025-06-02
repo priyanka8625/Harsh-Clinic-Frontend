@@ -63,6 +63,25 @@ const Login = () => {
                 alert(error.response?.data?.error || "Login failed. Please try again.");
             });
     }
+    else {
+    // SIGNUP
+    const data = {
+      name: formData.name,
+      userId: formData.userId,
+      password: formData.password
+    };
+
+    SignUp(data)
+      .then((resp) => {
+        console.log("Sign-up successful:", resp.data);
+        alert("Registration successful! Please sign in.");
+        setIsSignUpMode(false); // Switch to login form
+      })
+      .catch((error) => {
+        console.error("Error during signup:", error);
+        alert(error.response?.data?.error || "Signup failed. Please try again.");
+      });
+  }
 };
 
 
