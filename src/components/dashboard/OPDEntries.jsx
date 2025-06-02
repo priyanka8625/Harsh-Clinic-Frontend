@@ -99,7 +99,7 @@ const OPDEntries = () => {
 
   const fetchOPDData = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/opd/all',{
+      const response = await axios.get('http://harsh-2onb.onrender.com/opd/all',{
         withCredentials: true,
       }); 
       const rowsWithActions = response.data.map((row) => ({

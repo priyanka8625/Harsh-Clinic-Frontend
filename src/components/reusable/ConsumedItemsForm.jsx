@@ -29,7 +29,7 @@ const ConsumedItemsForm = () => {
   // Fetch item list from API
   useEffect(() => {
     axios
-      .get("http://harsh-2onb.onrender.com:8086/item/all",{withCredentials:true})
+      .get("http://harsh-2onb.onrender.com/item/all",{withCredentials:true})
       .then((response) => {
         if (response.data) {
           setItemList(response.data);

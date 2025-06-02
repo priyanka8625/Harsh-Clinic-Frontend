@@ -25,7 +25,7 @@ const IPDEntries = () => {
   // Function to fetch IPD data using axios
   const fetchIPDData = async () => {
     try {
-      const response = await axios.get('http://harsh-2onb.onrender.com:8086/ipd/all',{withCredentials:true}); // Replace with your API endpoint
+      const response = await axios.get('http://harsh-2onb.onrender.com/ipd/all',{withCredentials:true}); // Replace with your API endpoint
 
       // Mapping through the response data to add actions dynamically
       const rowsWithActions = response.data.map((row) => ({
