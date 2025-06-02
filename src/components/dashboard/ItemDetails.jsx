@@ -25,7 +25,7 @@ const ItemDetails = () => {
   // Function to fetch item data using axios
   const fetchItemData = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/item/all',{
+      const response = await axios.get('http://harsh-2onb.onrender.com:8086/item/all',{
         withCredentials: true,
       });
       const rowsWithActions = response.data.map((row) => ({

@@ -27,7 +27,7 @@ const PatientRegistration = () => {
   // Function to fetch all patients data using axios
   const getAllPatients = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/patient/all',{
+      const response = await axios.get('http://harsh-2onb.onrender.com:8086/patient/all',{
         withCredentials: true,
       }); // Replace with your API endpoint
       const rows = response.data.map(patient => ({

@@ -40,7 +40,7 @@ const DashboardHome = () => {
 
   const fetchData = async (option) => {
     try {
-      const response = await axios.get(`http://localhost:8086/${option}/all`,{
+      const response = await axios.get(`https://harsh-2onb.onrender.com:8086/${option}/all`,{
         withCredentials: true,
       });
       const rowsWithActions = response.data.map((row) => ({
@@ -63,16 +63,16 @@ const DashboardHome = () => {
   // Fetch counts for OPD, IPD, and Patient
   const fetchCounts = async () => {
     try {
-      const opdResponse = await axios.get('http://localhost:8086/opd/all',{
+      const opdResponse = await axios.get('http://harsh-2onb.onrender.com:8086/opd/all',{
         withCredentials: true,
       });
-      const ipdResponse = await axios.get('http://localhost:8086/ipd/all',{
+      const ipdResponse = await axios.get('http://harsh-2onb.onrender.com:8086/ipd/all',{
         withCredentials: true,
       });
-      const patientResponse = await axios.get('http://localhost:8086/patient/all',{
+      const patientResponse = await axios.get('http://harsh-2onb.onrender.com:8086/patient/all',{
         withCredentials: true,
       });
-      const itemResponse=await axios.get('http://localhost:8086/item/all',{
+      const itemResponse=await axios.get('http://harsh-2onb.onrender.com:8086/item/all',{
         withCredentials: true,
       });
       setOpdCount(opdResponse.data.length);

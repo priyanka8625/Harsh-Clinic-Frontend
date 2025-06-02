@@ -12,7 +12,7 @@ const BillingForm = () => {
   
     try {
       // Send request with ipdId in the URL and expect a Blob response
-      const response = await axios.get(`http://localhost:8086/bills/download/${ipdId}`, {
+      const response = await axios.get(`http://harsh-2onb.onrender.com:8086/bills/download/${ipdId}`, {
         responseType: "blob", // Important to get binary data
       });
   
